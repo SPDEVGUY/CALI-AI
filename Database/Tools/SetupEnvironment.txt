@@ -1,0 +1,30 @@
+﻿1. Create Additional Tools entries into Visual Studio
+
+	TOOLS > External Tools ...
+	Then create the following:
+	
+	TITLE:			AutoDal - Create New
+	COMMAND:		C:\Tools\AutoDal.exe
+	INITIAL DIR:	C:\Tools\
+	PARAMETERS:		-i:$(SolutionFileName) -c:$(SolutionDir)AutoDal.config
+	OPTIONS:		Use Output Window
+
+	TITLE:			AutoDal - Generate
+	COMMAND:		C:\Tools\AutoDal.exe
+	INITIAL DIR:	$(SolutionDir)
+	PARAMETERS:		-c:$(SolutionDir)AutoDal.config
+	OPTIONS:		Use Output Window
+
+
+	TITLE:			[DB] ALTER
+	COMMAND:		$(ProjectDir)\Tools\RunAllSql.exe
+	ARGUEMENTS:		-o:Alter -all 
+	INITIAL DIR:	$(ProjectDir)\Tools
+	OPTIONS:		Use Output Window
+
+	
+	TITLE:			[DB] RESET
+	COMMAND:		$(ProjectDir)\Tools\RunAllSql.exe
+	ARGUEMENTS:		-o:Reset -all
+	INITIAL DIR:	$(ProjectDir)\Tools
+	OPTIONS:		Use Output Window

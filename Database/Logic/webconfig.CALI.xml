@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  This file should be placed in a SharePoint Project's CONFIG mapped folder to the SharePoint Root
+  
+  A farm feature should be added that contains the following feature activated code in a feature event receiver:
+  
+  public override void FeatureActivated(SPFeatureReceiverProperties properties)
+  {
+      SPWebService.ContentService.ApplyApplicationContentToLocalServer();
+  }
+  
+  -->
+<actions>
+  <add path="configuration" id="8e93e983-db0b-417f-b807-a4c0c2b18adc">
+    <connectionStrings></connectionStrings>
+  </add>
+  <add path="configuration/connectionStrings" id="56be9dbc-d823-4cbb-8175-9c38c1531a64">
+    <add name="CALIConnectionString" connectionString="Data Source=.;Initial Catalog=CALI;User Id=CALIUser;Password=ThisIsASecurePassw0rd!;" providerName="System.Data.SqlClient" />
+  </add>
+</actions>

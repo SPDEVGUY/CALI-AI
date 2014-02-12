@@ -1,0 +1,194 @@
+<script src="Scripts/Views/Gen/CALI.Auth.controller.js"></script>
+<div data-ng-controller="CALIAuthController">
+    <ul class="nav navbar-nav">
+        <li class="dropdown hide-{{IsAuthenticated}}">
+            <a id="auth-Anon" role="button" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="glyphicon glyphicon-user"></i> Sign In <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="auth-Anon">
+                <li><a role="button" data-ng-click="ShowLogin()"><i class="glyphicon glyphicon-cog"></i> Login</a></li>
+                <li><a role="button" data-ng-click="ShowReset()"><i class="glyphicon glyphicon-pencil"></i> Recover Password</a></li>
+                <li class="divider"></li>
+                <li><a role="button" data-ng-click="ShowCreate()"><i class="glyphicon glyphicon-lock"></i> Create Account</a></li>
+            </ul>
+        </li>
+        <li class="dropdown hide-{{!IsAuthenticated}}">
+            <a id="auth-User" role="button" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="glyphicon glyphicon-user"></i> {{DisplayName}} <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="auth-User">
+                <li class="hide-{{IsWindowsAuth}}"><a role="button" data-ng-click="ShowChangePassword()"><i class="glyphicon glyphicon-cog"></i> Change Password</a></li>
+                <!--<li><a role="button" data-ng-click="ShowViewProfile()"><i class="icon-pencil"></i> Profile</a></li>-->
+                <li class="divider"></li>
+                <li><a role="button" data-ng-click="LogOut()"><i class="glyphicon glyphicon-lock"></i> Log out</a></li>
+            </ul>
+        </li>
+    </ul>
+    <div id="auth-Login" class="auth-View hide-default">
+        <form name="authLoginForm" class="form-inline" role="form">
+            <h3>Login...</h3>
+            <div class="form-group">
+                <label class="sr-only" for="username">User / Email</label>
+                <input type="text" class="form-control" name="username" data-ng-model="UserName" placeholder="User or Email" required>
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="password">Password</label>
+                <input type="password" class="form-control" name="password" data-ng-model="Password" placeholder="Password" required>
+            </div>
+<!--            <div class="checkbox">
+                <label>
+                <input type="checkbox"> Remember me
+            </label>
+            </div>-->
+            <button type="submit" class="btn btn-primary" data-ng-click="Authenticate()" data-ng-disabled="!authLoginForm.$valid" value="Login">Sign in</button>
+            <button class="btn btn-danger" data-ng-click="ClosePannels()">Cancel</button>
+        
+            <span class="hide-{{!SupportsWindowsAuth}}">
+                &nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;
+                <button class="btn btn-success" data-ng-click="UseWindowsAuth()">Windows Authentication</button>
+            </span>
+            
+            <span class="label label-{{StatusLabelType}} ">{{Status}}</span>
+        </form>
+    </div>
+
+    <div id="auth-Create" class="auth-View hide-default">
+        <h3>Register...</h3>
+        <form name="authCreateForm" class="form-horizontal" role="form">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">UserName: </label>
+                <div class="col-sm-4 ">
+                    <input type="text" class="form-control" name="username" maxlength="50" data-ng-model="UserName" placeholder="Enter username here" required data-ng-minlength="4">
+                    <div class="text-danger" data-ng-show="authCreateForm.username.$error.required"> * Required.</div>
+                    <div class="text-danger" data-ng-show="authCreateForm.username.$error.minlength"> * Minimum 4 characters.</div>
+                    <div class="label label-warning" data-ng-show="ShowUserExists">User already exists.</div>
+                </div>
+                    
+                <label class="col-sm-2 control-label">Display Name:</label>
+                
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" name="displayName" maxlength="50" data-ng-model="DisplayName" placeholder="Enter display name here" required data-ng-minlength="4">
+                    <div class="text-danger" data-ng-show="authCreateForm.displayName.$error.required"> * Required.</div>
+                    <div class="text-danger" data-ng-show="authCreateForm.displayName.$error.minlength"> * Minimum 4 characters.</div>
+                </div>
+            </div>
+            <div class="form-group">
+        
+                <label class="col-sm-2 control-label">Email:</label>
+                
+                <div class="col-sm-4">
+                    <input type="email" class="form-control" name="email" maxlength="100" data-ng-model="Email" placeholder="Enter email here" required />
+                    <div class="text-danger" data-ng-show="authCreateForm.email.$error.required"> * Required.</div>
+                    <div class="text-danger" data-ng-show="authCreateForm.email.$error.email"> * Invalid Email.</div>
+                    <div class="label label-warning" data-ng-show="ShowEmailExists">Email already exists.</div>
+                </div>
+
+                <label class="col-sm-2 control-label">Confirm Email: </label>
+                <div class="col-sm-4">
+                    <input type="email" class="form-control" name="emailConfirm" maxlength="100" data-ng-model="EmailConfirm" placeholder="Enter email again to confirm" required data-ng-matches="email" />
+                    <div class="text-danger" data-ng-show="authCreateForm.emailConfirm.$error.required"> * Required.</div>
+                    <div class="text-danger" data-ng-show="authCreateForm.emailConfirm.$error.matches && !authCreateForm.emailConfirm.$error.required"> * Doesn't Match.</div>
+                </div>
+            </div>
+            <div class="form-group">
+        
+                <label class="col-sm-2 control-label">Password:</label>
+                <div class="col-sm-4">
+                    <input type="password" class="form-control" name="password" data-ng-model="Password" placeholder="Enter password" required data-ng-minlength="6">
+                    <div class="text-danger" data-ng-show="authCreateForm.password.$error.required"> * Required.</div>
+                    <div class="text-danger" data-ng-show="authCreateForm.password.$error.minlength"> * Minimum 6 characters.</div>
+                </div>
+
+                <label class="col-sm-2 control-label">Confirm Password:</label>
+                <div class="col-sm-4">
+                    <input type="password" class="form-control" name="confirmPassword" data-ng-model="PasswordConfirm" placeholder="Enter password again to confirm" required data-ng-matches="password">
+                    <div class="text-danger" data-ng-show="authCreateForm.confirmPassword.$error.required"> * Required.</div>
+                    <div class="text-danger" data-ng-show="authCreateForm.confirmPassword.$error.matches && !authCreateForm.confirmPassword.$error.required"> * Doesn't Match.</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-10 col-sm-2 text-right">
+                    <span class="label label-{{StatusLabelType}}">{{Status}}</span>            
+    
+                    <input class="btn btn-primary" type="submit" value="Create" data-ng-click="Create()" data-ng-disabled="!authCreateForm.$valid">
+                    &nbsp;&nbsp;&nbsp;
+                    <button class="btn btn-danger" data-ng-click="ClosePannels()">Cancel</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+    <div id="auth-ChangePassword" class="auth-View hide-default">
+        <h3>Change Password...</h3>
+        <form name="authChangeForm" class="form-inline" role="form">
+            <div class="form-group">
+                <label class="sr-only">Password</label>
+                <input type="password" class="form-control" name="password" data-ng-model="Password" placeholder="Enter password" required>
+            </div>
+            <div class="form-group">
+                <label class="sr-only">Confirm Password</label>
+                <span class="text-danger" data-ng-show="authChangeForm.confirmPassword.$error.matches"> * Doesn't Match.</span>
+                <input type="password" class="form-control" name="confirmPassword" data-ng-model="PasswordConfirm" placeholder="Enter password again to confirm" required data-ng-matches="password">
+            </div>
+    
+            <input class="btn btn-primary" type="submit" value="Change Password" data-ng-click="ChangePassword()" data-ng-disabled="!authChangeForm.$valid">
+            <button class="btn btn-danger" data-ng-click="ClosePannels()">Cancel</button>
+            &nbsp;&nbsp;&nbsp;
+            <span class="label label-{{StatusLabelType}}">{{Status}}</span>          
+        </form>
+
+    </div>
+
+    <div id="auth-Reset" class="auth-View hide-default">
+        <h3>Recover Password...</h3>
+        <form name="authResetForm" class="form-inline" role="form">
+            <div class="form-group">
+                <label class="sr-only">User / Email</label>
+                <input type="text" class="form-control" name="username" data-ng-model="UserName" placeholder="User or Email" required>
+            </div>
+            <input class="btn btn-primary" type="submit" value="Recover Password" data-ng-click="Reset()" data-ng-disabled="!authResetForm.$valid">
+            <button class="btn btn-danger" data-ng-click="ClosePannels()">Cancel</button>
+            &nbsp;&nbsp;&nbsp;
+            <span class="label label-{{StatusLabelType}}">{{Status}}</span>          
+        </form>
+
+    </div>
+    
+<!--
+    <div id="auth-ProfileView" class="auth-View hide-default">
+        <h3>Profile...</h3>
+    
+        Nothing here yet.
+            
+    
+        <span class="label label-{{StatusLabelType}}">{{Status}}</span>            
+    
+        <input class="btn btn-primary" type="button" value="Edit" data-ng-click="ClosePannels()">
+        &nbsp;&nbsp;&nbsp;
+        <button class="btn btn-danger" data-ng-click="ClosePannels()">Close</button>
+
+    </div>
+-->
+
+
+    <style>
+        .hide-true { display: none !important; }
+        .hide-default { display: none; }
+        .auth-View { 
+            position: absolute;
+            top: 71px;
+            left: 0px;
+            width: 100%;
+            background-color: #DDD;
+            padding: 2em;
+            border-bottom: 1px solid #999;
+        }
+        .auth-required { }
+        .auth-showonlogin { }
+        .auth-control input.ng-invalid.ng-dirty {
+            background-color: #FA787E;
+        }
+    </style>
+</div>

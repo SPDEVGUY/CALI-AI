@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{211EBE27-BFB6-4327-B025-646D3E3A5F2A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CALI.Database</RootNamespace>
+    <AssemblyName>CALI.Database</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.SqlServer.Types, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Contracts\Auth\Permission\PermissionContract.cs" />
+    <Compile Include="Contracts\Auth\Permission\PermissionContractBase.cs" />
+    <Compile Include="Contracts\Auth\RolePermission\RolePermissionContract.cs" />
+    <Compile Include="Contracts\Auth\RolePermission\RolePermissionContractBase.cs" />
+    <Compile Include="Contracts\Auth\Role\RoleContract.cs" />
+    <Compile Include="Contracts\Auth\Role\RoleContractBase.cs" />
+    <Compile Include="Contracts\Auth\UserRole\UserRoleContract.cs" />
+    <Compile Include="Contracts\Auth\UserRole\UserRoleContractBase.cs" />
+    <Compile Include="Contracts\Auth\User\UserContract.cs" />
+    <Compile Include="Contracts\Auth\User\UserContractBase.cs" />
+    <Compile Include="Contracts\Client\Users\UsersContract.cs" />
+    <Compile Include="Contracts\Client\Users\UsersContractBase.cs" />
+    <Compile Include="Contracts\ContractBase.cs" />
+    <Compile Include="Contracts\Data\BinaryDataMoniker\BinaryDataMonikerContract.cs" />
+    <Compile Include="Contracts\Data\BinaryDataMoniker\BinaryDataMonikerContractBase.cs" />
+    <Compile Include="Contracts\Data\BinaryData\BinaryDataContract.cs" />
+    <Compile Include="Contracts\Data\BinaryData\BinaryDataContractBase.cs" />
+    <Compile Include="Contracts\Data\Moniker\MonikerContract.cs" />
+    <Compile Include="Contracts\Data\Moniker\MonikerContractBase.cs" />
+    <Compile Include="Contracts\Data\Query\QueryContract.cs" />
+    <Compile Include="Contracts\Data\Query\QueryContractBase.cs" />
+    <Compile Include="Contracts\ListItemContract.cs" />
+    <Compile Include="Contracts\ListItemContractBase.cs" />
+    <Compile Include="Logic\Auth\Permission\PermissionContractBase.Logic.cs" />
+    <Compile Include="Logic\Auth\Permission\PermissionLogic.cs" />
+    <Compile Include="Logic\Auth\Permission\PermissionLogic.Static.cs" />
+    <Compile Include="Logic\Auth\Permission\PermissionLogicBase.cs" />
+    <Compile Include="Logic\Auth\RolePermission\RolePermissionContractBase.Logic.cs" />
+    <Compile Include="Logic\Auth\RolePermission\RolePermissionLogic.cs" />
+    <Compile Include="Logic\Auth\RolePermission\RolePermissionLogic.Static.cs" />
+    <Compile Include="Logic\Auth\RolePermission\RolePermissionLogicBase.cs" />
+    <Compile Include="Logic\Auth\Role\RoleContractBase.Logic.cs" />
+    <Compile Include="Logic\Auth\Role\RoleLogic.cs" />
+    <Compile Include="Logic\Auth\Role\RoleLogic.Static.cs" />
+    <Compile Include="Logic\Auth\Role\RoleLogicBase.cs" />
+    <Compile Include="Logic\Auth\UserRole\UserRoleContractBase.Logic.cs" />
+    <Compile Include="Logic\Auth\UserRole\UserRoleLogic.cs" />
+    <Compile Include="Logic\Auth\UserRole\UserRoleLogic.Static.cs" />
+    <Compile Include="Logic\Auth\UserRole\UserRoleLogicBase.cs" />
+    <Compile Include="Logic\Auth\User\UserContractBase.Logic.cs" />
+    <Compile Include="Logic\Auth\User\UserLogic.cs" />
+    <Compile Include="Logic\Auth\User\UserLogic.Static.cs" />
+    <Compile Include="Logic\Auth\User\UserLogicBase.cs" />
+    <Compile Include="Logic\CacheContainer.cs" />
+    <Compile Include="Logic\CALIDb.cs" />
+    <Compile Include="Logic\CALIDbBase.cs" />
+    <Compile Include="Logic\Client\Users\UsersLogic.cs" />
+    <Compile Include="Logic\Client\Users\UsersLogic.Static.cs" />
+    <Compile Include="Logic\Client\Users\UsersLogicBase.cs" />
+    <Compile Include="Logic\Data\BinaryDataMoniker\BinaryDataMonikerContractBase.Logic.cs" />
+    <Compile Include="Logic\Data\BinaryDataMoniker\BinaryDataMonikerLogic.cs" />
+    <Compile Include="Logic\Data\BinaryDataMoniker\BinaryDataMonikerLogic.Static.cs" />
+    <Compile Include="Logic\Data\BinaryDataMoniker\BinaryDataMonikerLogicBase.cs" />
+    <Compile Include="Logic\Data\BinaryData\BinaryDataContractBase.Logic.cs" />
+    <Compile Include="Logic\Data\BinaryData\BinaryDataLogic.cs" />
+    <Compile Include="Logic\Data\BinaryData\BinaryDataLogic.Static.cs" />
+    <Compile Include="Logic\Data\BinaryData\BinaryDataLogicBase.cs" />
+    <Compile Include="Logic\Data\Moniker\MonikerContractBase.Logic.cs" />
+    <Compile Include="Logic\Data\Moniker\MonikerLogic.cs" />
+    <Compile Include="Logic\Data\Moniker\MonikerLogic.Static.cs" />
+    <Compile Include="Logic\Data\Moniker\MonikerLogicBase.cs" />
+    <Compile Include="Logic\Data\Query\QueryLogic.cs" />
+    <Compile Include="Logic\Data\Query\QueryLogic.Static.cs" />
+    <Compile Include="Logic\Data\Query\QueryLogicBase.cs" />
+    <Compile Include="Logic\DbConnectionString.cs" />
+    <Compile Include="Logic\DbConnectionStringBase.cs" />
+    <Compile Include="Logic\ListExtensions.cs" />
+    <Compile Include="Logic\ListItemLogicBase.cs" />
+    <Compile Include="Logic\ListItemLogicFront.cs" />
+    <Compile Include="Logic\ListItemLogicFrontStatic.cs" />
+    <Compile Include="Logic\LogicBase.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Logic\webconfig.CALI.xml" />
+    <Content Include="SQL\Alter\00-ClearOut\Auth.sql" />
+    <Content Include="SQL\Alter\00-ClearOut\Client.sql" />
+    <Content Include="SQL\Alter\00-ClearOut\Data.sql" />
+    <Content Include="SQL\Alter\01-EnsureSchemas\Auth.sql" />
+    <Content Include="SQL\Alter\01-EnsureSchemas\Client.sql" />
+    <Content Include="SQL\Alter\01-EnsureSchemas\Data.sql" />
+    <Content Include="SQL\Alter\02-EnsureTables\Auth\00-TableVersion.sql" />
+    <Content Include="SQL\Alter\02-EnsureTables\Auth\Permission.sql" />
+    <Content Include="SQL\Alter\02-EnsureTables\Auth\Role.sql" />
+    <Content Include="SQL\Alter\02-EnsureTables\Auth\RolePermission.sql" />
+    <Content Include="SQL\Alter\02-EnsureTables\Auth\User.sql" />
+    <Content Include="SQL\Alter\02-EnsureTables\Auth\UserRole.sql" />
+    <Content Include="SQL\Alter\02-EnsureTables\Client\00-TableVersion.sql" />
+    <Content Include="SQL\Alter\02-EnsureTables\Data\00-TableVersion.sql" />
+    <Content Include="SQL\Alter\02-EnsureTables\Data\BinaryData.sql" />
+    <Content Include="SQL\Alter\02-EnsureTables\Data\BinaryDataMoniker.sql" />
+    <Content Include="SQL\Alter\02-EnsureTables\Data\Moniker.sql" />
+    <Content Include="SQL\Alter\02-EnsureTables\Data\Query.sql" />
+    <Content Include="SQL\Alter\03-Updates\Auth\TableName_V1.txt" />
+    <Content Include="SQL\Alter\03-Updates\Client\TableName_V1.txt" />
+    <Content Include="SQL\Alter\03-Updates\Data\TableName_V1.txt" />
+    <Content Include="SQL\Alter\04-Views\Auth\ViewName.txt" />
+    <Content Include="SQL\Alter\04-Views\Client\Users.sql" />
+    <Content Include="SQL\Alter\04-Views\Client\ViewName.txt" />
+    <Content Include="SQL\Alter\04-Views\Data\ViewName.txt" />
+    <Content Include="SQL\Alter\05-Funcs\00-Generated\Auth\[Auth].[GetUserIdByUserToken].sql" />
+    <Content Include="SQL\Alter\05-Funcs\01-Custom\Auth\[Auth].[FunctionName].txt" />
+    <Content Include="SQL\Alter\05-Funcs\01-Custom\Client\[Client].[FunctionName].txt" />
+    <Content Include="SQL\Alter\05-Funcs\01-Custom\Data\[Data].[FunctionName].txt" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Auth\Permission\[Auth].[Permission_SelectBy_UserId].sql" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Client\Users\[Client].[Users_SelectByUser_Current].sql" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Client\Users\[Client].[Users_SelectByUser_UpdateProfile].sql" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Data\BinaryData\[Data].[BinaryData_Delete].sql" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Data\BinaryData\[Data].[BinaryData_Exists].sql" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Data\BinaryData\[Data].[BinaryData_Insert].sql" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Data\BinaryData\[Data].[BinaryData_Search].sql" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Data\BinaryData\[Data].[BinaryData_SelectAll].sql" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Data\BinaryData\[Data].[BinaryData_SelectBy_BinaryDataId].sql" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Data\BinaryData\[Data].[BinaryData_Update].sql" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Data\Moniker\[Data].[Moniker_Delete].sql" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Data\Moniker\[Data].[Moniker_Exists].sql" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Data\Moniker\[Data].[Moniker_Insert].sql" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Data\Moniker\[Data].[Moniker_Search].sql" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Data\Moniker\[Data].[Moniker_SelectAll].sql" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Data\Moniker\[Data].[Moniker_SelectBy_MonikerId].sql" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Data\Moniker\[Data].[Moniker_Update].sql" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Data\Query\[Data].[Query_Delete].sql" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Data\Query\[Data].[Query_Exists].sql" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Data\Query\[Data].[Query_Insert].sql" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Data\Query\[Data].[Query_Search].sql" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Data\Query\[Data].[Query_SelectAll].sql" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Data\Query\[Data].[Query_SelectBy_QueryId].sql" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Data\Query\[Data].[Query_Update].sql" />
+    <Content Include="SQL\Alter\06-Procs\00-Generated\Note.txt" />
+    <Content Include="SQL\Alter\06-Procs\01-Custom\Auth\[Auth].[TableName_ProcedureName].txt" />
+    <Content Include="SQL\Alter\06-Procs\01-Custom\Client\[Client].[TableName_ProcedureName].txt" />
+    <Content Include="SQL\Alter\06-Procs\01-Custom\Data\[Data].[TableName_ProcedureName].txt" />
+    <Content Include="SQL\Alter\07-Indexes\Auth\User.sql" />
+    <Content Include="SQL\Alter\07-Indexes\Auth\ViewName.txt" />
+    <Content Include="SQL\Alter\07-Indexes\Client\ViewName.txt" />
+    <Content Include="SQL\Alter\07-Indexes\Data\BinaryData.sql" />
+    <Content Include="SQL\Alter\07-Indexes\Data\Moniker.sql" />
+    <Content Include="SQL\Alter\07-Indexes\Data\ViewName.txt" />
+    <Content Include="SQL\Alter\08-FKeys\Auth\ChildTableName.txt" />
+    <Content Include="SQL\Alter\08-FKeys\Auth\RolePermission.sql" />
+    <Content Include="SQL\Alter\08-FKeys\Auth\UserRole.sql" />
+    <Content Include="SQL\Alter\08-FKeys\Client\ChildTableName.txt" />
+    <Content Include="SQL\Alter\08-FKeys\Data\BinaryDataMoniker.sql" />
+    <Content Include="SQL\Alter\08-FKeys\Data\ChildTableName.txt" />
+    <Content Include="SQL\Alter\09-DefaultData\Auth\01-User.sql" />
+    <Content Include="SQL\Alter\09-DefaultData\Auth\02-Role.sql" />
+    <Content Include="SQL\Alter\09-DefaultData\Auth\03-Permissions.Services.Generated.sql" />
+    <Content Include="SQL\Alter\09-DefaultData\Auth\99-RolePermission.sql" />
+    <Content Include="SQL\Create\01-Database\CreateDatabase.sql" />
+    <Content Include="SQL\Create\02-Logins\CreateLogin.sql" />
+    <Content Include="SQL\Delete\01-Database\DropDatabase.sql" />
+    <Content Include="SQL\Delete\02-Logins\DropLogin.sql" />
+    <Content Include="Tools\RunAllSql.exe" />
+    <Content Include="Tools\SetupEnvironment.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Tools\RunAllSql.exe.config" />
+    <None Include="Tools\SqlVars.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

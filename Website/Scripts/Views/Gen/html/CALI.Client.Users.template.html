@@ -1,0 +1,147 @@
+<!--<div data-ng-include="'/scripts/views/gen/html/CALI.Client.Users.template.html'"></div>-->
+<script src="Scripts/Views/gen/js/CALI.Client.Users.controller.js"></script><!-- Edit this, remove /gen/-->
+<div data-ng-controller="CALIClientUsersController">
+
+
+    <h3>Users</h3>
+    <div data-ng-show="vm.IsLoading">
+        <img src="/Content/images/loading.gif"/> Loading...
+    </div>
+
+    <!--
+        Key Fields: UserId 
+        Value Fields:
+        
+				UserId as int
+				DisplayName as stringComment
+        -->
+
+    <!-- List view -->
+    <div data-ng-show="!vm.IsLoading && ShowList">
+        <table class="table table-condensed table-bordered table-striped">
+            <tr>
+            <th>UserId</th>
+            <th>DisplayName</th>
+                <th>Actions</th>
+            </tr>
+            <tr data-ng-repeat="Item in vm.Items" data-ng-mouseenter="vm.MoveIndex($index)">
+            <td>{{Item.UserId}}</td>
+            <td>{{Item.DisplayName}}</td>
+                <td style="text-align: right">
+                    <button 
+                        role="button" 
+                        class="btn btn-primary" 
+                        data-ng-click="ShowDetailView()"
+                        ><i class="glyphicon glyphicon-zoom-in"></i></button>
+                    <button  data-ng-disabled="!CanUpdate"
+                             role="button" 
+                             class="btn btn-info" 
+                             data-ng-click="ShowEditView()"
+                        ><i class="glyphicon glyphicon-pencil"></i></button>
+                    <button  data-ng-disabled="!CanDelete"
+                             role="button" 
+                             class="btn btn-danger" 
+                             data-ng-click="DeleteCurrentItem()"
+                        ><i class="glyphicon glyphicon-trash"></i></button>
+                </td>
+            </tr>
+        </table>
+        <div class="well">
+            <button  data-ng-disabled="!CanInsert"
+                     role="button" 
+                     class="btn btn-info" 
+                     data-ng-click="ShowAddView()"
+                ><i class="glyphicon glyphicon-plus"></i> Add</button>
+            <button  data-ng-disabled="!CanInsert"
+                     role="button" 
+                     class="btn btn-info" 
+                     data-ng-click="ShowMatrixView()"
+                ><i class="glyphicon glyphicon-th-list"></i> Matrix View</button>
+        </div>
+    </div>
+
+
+    <!-- Matrix view -->
+    <div data-ng-show="!vm.IsLoading && ShowMatrix">
+        <table class="table table-condensed table-bordered table-striped">
+            <tr>
+                <th>&nbsp;</th>
+                <th data-ng-repeat="Item in vm.Items">
+                    {{Item.DisplayName}}
+                </th>
+            </tr>
+        <tr>
+            <td>UserId</td>
+            <td data-ng-repeat="Item in vm.Items">{{Item.UserId}}</td>
+        </tr>
+        <tr>
+            <td>DisplayName</td>
+            <td data-ng-repeat="Item in vm.Items">{{Item.DisplayName}}</td>
+        </tr>
+        </table>
+    </div>
+
+    <!-- Detail view -->
+    <div data-ng-show="!vm.IsLoading && ShowDetail">
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>Field</th>
+                <th>Value</th>
+            </tr>
+        <tr>
+            <td>UserId</td>
+            <td>{{vm.CurrentItem.UserId}}</td>
+        </tr>
+        <tr>
+            <td>DisplayName</td>
+            <td>{{vm.CurrentItem.DisplayName}}</td>
+        </tr>
+        </table>
+        <div class="well">
+            <button  ng-disabled="!CanUpdate"
+                     role="button" 
+                     class="btn btn-info" 
+                     data-ng-click="ShowEditView()"
+                ><i class="glyphicon glyphicon-pencil"></i> Edit</button>
+            <button 
+                role="button" 
+                class="btn btn-danger" 
+                data-ng-click="ShowListView()"
+                ><i class="glyphicon glyphicon-remove"></i>Back</button>
+        </div>
+    </div>
+
+    <!-- ShowInput view -->
+    <div data-ng-show="!vm.IsLoading && ShowInput">
+        <form name="editUsers" class="form-horizontal">
+        <div class="control-group">
+            <label class="control-label">UserId</label>
+            <div class="controls">
+                <select
+                    class="nullable" 
+                    data-ng-mode="vm.CurrentItem.UserId"
+                    data-ng-options="i.UserId for i.UserIdId in UserIds"
+                    ><option value="">-- Select UserId --</option></select>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">DisplayName</label>    
+            <div class="controls">
+                <input type="text" data-ng-model="vm.CurrentItem.DisplayName">
+            </div>
+        </div>
+            <div class="well">
+                <button  ng-disabled="!editUsers.$valid"
+                         role="button" 
+                         class="btn btn-success" 
+                         data-ng-click="SaveChanges()"
+                    ><i class="glyphicon glyphicon-check"></i>Save Changes</button>
+                <button 
+                    role="button" 
+                    class="btn btn-danger" 
+                    data-ng-click="CancelInput()"
+                    ><i class="glyphicon glyphicon-remove"></i>Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

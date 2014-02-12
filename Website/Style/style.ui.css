@@ -1,0 +1,400 @@
+﻿.loading 
+{
+	padding-left: 35px;
+	background-position: left center;
+	background-repeat: no-repeat;
+	background-image: url('i/loading.gif');
+	margin-top: 20px;
+}
+.modalLoading 
+{
+	padding-left: 35px;
+	background-position: left center;
+	background-repeat: no-repeat;
+	background-image: url('i/loading.gif');
+    margin: 20px;
+}
+.largeLoading
+{
+	padding-top: 140px;
+	background-position: center top;
+	background-repeat: no-repeat;
+	background-image: url('i/large_loading.gif');
+	text-align: center;
+    position: absolute;
+    right: 0px;
+    top: 40px;
+    background-color: white;
+    padding-left: 30px;
+    padding-right: 30px;
+    border-left: solid 1px #DDD;
+    border-bottom: solid 1px #DDD;
+    padding-bottom: 30px;
+    border-bottom-left-radius: 30px;
+}
+@media (max-width: 979px) {
+    .largeLoading {
+        top: 51px;
+    }
+}
+
+.loginPrompt .loginForm {
+    float: right;
+    padding-top: 10px;
+}
+
+.loginPrompt input, .loginPrompt .btn {
+    margin: 5px;
+}
+
+.selectable:hover
+{
+	cursor:pointer;
+}
+
+
+.form-actions .btn
+{
+	margin: 5px;
+}
+form
+{
+	margin-top: 20px !important;
+}
+
+
+/*
+BODY 
+{
+	font-family: Segoe UI, Calibri, Verdana;
+	background-color: Black;
+	color: #FEFEFE;
+	margin-bottom: 100px;
+}
+H1
+{
+	font-family: Segoe UI, Calibri, Verdana;
+	font-size: 20px;
+}
+INPUT, .button
+{
+	background-color: #222;
+	font-weight: bold;
+	font-size: 12pt;
+	color: #FFF;
+	padding: 5px;
+	border: solid 2px #FFF;
+	cursor: pointer;
+}
+INPUT[type='image'] 
+{
+	border:none;	
+	background-color: transparent;
+}
+INPUT[type='button'], BUTTON, .button
+{	
+	border-radius: 5px;
+	background-color: #444;
+	font-weight: bold;
+	font-size: 12pt;
+	color: #FFF;
+	padding: 5px;
+	border: solid 2px #FFF;
+	cursor: pointer;
+}
+.accountControlButtons 
+{
+	position:absolute;
+	top: 5px;
+	right: 0px;	
+}
+.accountControlButtons DIV
+{
+	float:right;
+	margin: 5px;
+}
+.entry INPUT[type='text'] 
+{
+	width:95%;
+	cursor:text;
+}
+.errorDisplay SPAN,.errorDisplay DIV
+{
+	font-size: 10px;
+}
+
+TEXTAREA
+{
+	width:95%;
+	background-color: #222;
+	font-weight: bold;
+	font-size: 12pt;
+	color: #FFF;
+	padding: 5px;
+	border: solid 2px #FFF;
+}
+TD { vertical-align:top; }
+
+TABLE .label 
+{
+	font-weight:bold;
+}
+
+A 
+{
+	color: #FFD000;
+	text-decoration:none;
+}
+
+A:hover
+{
+	color: #FFE678;
+	text-decoration:underline;
+}
+.header
+{
+	background-position: right center;
+	background-image: url('i/logo.png');
+	background-repeat: no-repeat;
+	margin-right: 20px;
+}
+.header H1
+{
+	font-size: 48pt;
+	font-weight:bold;
+	margin: 5px;
+}
+.header H2
+{
+	font-size: 15pt;
+	font-weight:bold;
+	color: #999;
+	text-indent: 0px;
+	margin: 5px;
+	position:relative;
+	display:block;
+	top:-25px;
+}
+
+.item .back
+{
+	display:none;
+	font-size: 45px;
+	padding: 10px;
+	background-color: #000;
+	width: 45px;
+}
+.item .content
+{	
+	display:inline;
+}
+
+.listWrap
+{
+	
+	background-color: #111;
+	width: 400px;
+}
+.item
+{
+	
+}
+.seperator
+{
+	background-color: #555;
+	height: 1px;
+}
+.addItem TD 
+{
+	padding: 5px;
+}
+.addItem 
+{
+	width:100%;
+}
+.success
+{
+	border-top: solid 1px #00AA00;
+	padding: 10px;
+	border-bottom: solid 1px #00AA00;
+	font-weight: bold;
+	margin-bottom: 20px;
+	
+}
+
+.dataTable TD 
+{
+	padding: 10px;
+}
+.dataTable  
+{
+	border: solid 1px #999;
+	width: 100%;
+}
+.dataTable .inactive
+{
+	background: #610000;
+}
+.hint
+{
+	font-size:smaller;
+	color: #999;
+}
+.required
+{
+	font-size:smaller;
+	color: #D60000;
+}
+.centerThis 
+{	
+	margin-left: auto; margin-right: auto; 
+}
+.viewArea
+{
+	width: 95%;
+	margin-left: auto; margin-right: auto; 
+}
+.bigTextBlock
+{
+	margin-top: 35px;
+}
+.view
+{
+}
+.smallTitle
+{
+	font-size: small;
+}
+.mediumTitle
+{
+	font-size: large;
+}
+.bigTitle
+{
+	font-size: x-large;
+}
+.indentThis
+{
+	margin-left: 20px;
+}
+
+.clickable, .selectable
+{
+	cursor:pointer;
+}
+.selectable 
+{
+	padding-left: 20px;
+}
+.clickable:hover
+{
+	background-position: bottom;
+	background-image: url('i/clickable_hover.gif');
+	background-repeat: repeat-x;
+}
+.selectable:hover
+{
+	background-position: left;
+	background-repeat: repeat-y;
+	background-image: url('i/selectable_hover.gif');
+}
+.listView .selected
+{
+	background-position: left;
+	background-repeat: repeat-y;
+	background-image: url('i/selectable_selected.gif');
+}
+.commandButtons 
+{
+	text-align:right;
+	margin-top: 20px;
+}
+.commandButtons DIV 
+{
+	float:left;
+	margin: 5px;
+}
+.verticleButtons 
+{
+	text-align:center;
+}
+.verticleButtons DIV 
+{
+	display:block;
+	margin: 0px;
+	margin-bottom: 10px;
+}
+.loading 
+{
+	padding-left: 25px;
+	background-position: left center;
+	background-repeat: no-repeat;
+	background-image: url('i/loading.gif');
+	margin-top: 20px;
+}
+.largeLoading
+{
+	padding-top: 70px;
+	background-position: center top;
+	background-repeat: no-repeat;
+	background-image: url('i/large_loading.gif');
+	text-align: center;
+}
+.siteNavigation
+{
+	position:fixed;
+	top:0px;
+	right:0px;
+	width:75px;
+	height: 75px;
+	border-bottom: solid 1px #555;
+	border-left: solid 1px #555;
+	border-bottom-left-radius: 20px;
+	background-color: #222;
+	text-align:center;
+}
+.siteNavigation .clickable:hover
+{
+	background-position: center;
+	background-image: url('i/clickable_navhover.png');
+	background-repeat: no-repeat;
+}
+.siteNavigation IMG
+{
+	margin: 10px;
+}
+.breadcrum
+{
+	color: #999;
+	position: absolute;
+	top: 115px;
+	left: 20px;
+	font-size: smaller;
+}
+.breadcrum A
+{
+	text-decoration:none;
+	font-size: smaller;
+	color: #999;
+}
+.breadcrum A:hover
+{
+	text-decoration:none;
+	color: #FFF;
+}
+.viewArea
+{
+	margin-top: 20px;
+}
+.disabled 
+{
+	background-color: #111;
+	color: #BBB;
+}
+.button .ui-icon
+{
+	float:left;
+	margin-top: 2px;
+	margin-right: 5px;
+}
+*/

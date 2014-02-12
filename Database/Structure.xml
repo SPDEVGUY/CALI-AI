@@ -1,0 +1,1527 @@
+<?xml version="1.0"?>
+<DatabaseDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="CALI" SharePointBdcNameSpace="CALI.SharePoint.ExternalContentTypes" LogicClassNameSpace="CALI.Database.Logic" ContractClassNameSpace="CALI.Database.Contracts" ModelClassNameSpace="CALI.Client.Models" ViewModelClassNameSpace="CALI.Client.ViewModels" MetroModelClassNameSpace="CALI.Client.Metro.Web.Models" MetroViewModelClassNameSpace="CALI.Client.Metro.Web.ViewModels" JavaModelClassNameSpace="com.cali.models" JavaViewModelClassNameSpace="com.cali.viewmodels" ServiceClassNameSpace="CALI.WebSite.Services" OnlyUseViewsForServices="true">
+  <ServiceIgnoreTables>
+    <string>Auth.*</string>
+    <string>Client.TableVersion</string>
+    <string>DATA.TableVersion</string>
+  </ServiceIgnoreTables>
+  <ConnectionString>Data Source=.;Initial Catalog=CALI;Integrated Security=SSPI;</ConnectionString>
+  <DeploymentConnectionString>Data Source=.;Initial Catalog=CALI;User Id=CALIUser;Password=ThisIsASecurePassw0rd!;</DeploymentConnectionString>
+  <Schemas>
+    <SchemaDefinition Name="Client">
+      <Tables>
+        <Items>
+          <KeyCollectionItemOfTableDefinition Key="TableVersion">
+            <Value Name="TableVersion" IsView="false" IsSearchable="true" IsListable="false" VerifyConcurrency="false" IdentityField="TableId">
+              <Fields>
+                <Items>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="TableId">
+                    <Value Name="TableId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="TableName">
+                    <Value Name="TableName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(150)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="Version">
+                    <Value Name="Version" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                </Items>
+              </Fields>
+              <Indexes>
+                <Items>
+                  <KeyCollectionItemOfIndexDefinition Key="PK_TableVersion">
+                    <Value Name="PK_TableVersion" IsPrimaryKey="true" IsForeignKey="false" IsUniqueKey="true" IsClustered="true">
+                      <FieldNames>
+                        <string>TableId</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                </Items>
+              </Indexes>
+              <FKeys>
+                <Items />
+              </FKeys>
+              <KeyFields>
+                <string>TableId</string>
+              </KeyFields>
+            </Value>
+          </KeyCollectionItemOfTableDefinition>
+          <KeyCollectionItemOfTableDefinition Key="Users">
+            <Value Name="Users" IsView="true" IsSearchable="true" IsListable="false" VerifyConcurrency="false" IdentityField="UserId">
+              <ViewCreateSql>CREATE VIEW [Client].[Users] WITH SCHEMABINDING
+AS
+--Only return things you don't mind anyone seeing.
+--Example: Protected email, usertoken, username...
+SELECT [UserId]
+      ,[DisplayName]
+  FROM [Auth].[User]
+</ViewCreateSql>
+              <Fields>
+                <Items>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="UserId">
+                    <Value Name="UserId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="DisplayName">
+                    <Value Name="DisplayName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                </Items>
+              </Fields>
+              <Indexes>
+                <Items />
+              </Indexes>
+              <FKeys>
+                <Items />
+              </FKeys>
+              <KeyFields>
+                <string>UserId</string>
+              </KeyFields>
+            </Value>
+          </KeyCollectionItemOfTableDefinition>
+        </Items>
+      </Tables>
+      <Procedures>
+        <Items>
+          <KeyCollectionItemOfProcedureDefinition Key="Users_SelectByUser_Current">
+            <Value Name="Users_SelectByUser_Current" MethodName="SelectByUser_Current" ProcedureType="Lookup" TableName="Users" IsStatic="false">
+              <CustomProcSql>
+CREATE PROCEDURE [Client].[Users_SelectByUser_Current]
+	@AuthUserId int
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT	*
+	FROM	[Client].[Users]
+	WHERE	[UserId] = @AuthUserId
+
+END</CustomProcSql>
+              <Parameters>
+                <FieldDefinition Name="AuthUserId" SqlType="int" DotNetType="int" JavaType="int" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Users_SelectByUser_UpdateProfile">
+            <Value Name="Users_SelectByUser_UpdateProfile" MethodName="SelectByUser_UpdateProfile" ProcedureType="Lookup" TableName="Users" IsStatic="false">
+              <CustomProcSql>
+CREATE PROCEDURE [Client].[Users_SelectByUser_UpdateProfile]
+	@AuthUserId int,
+	@DisplayName varchar(50),
+	@Email varchar(100)
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	if( LEN(@DisplayName) &lt;= 1 ) SET @DisplayName = 'My Name Is Invaid';
+
+
+	UPDATE [Auth].[User] SET
+	[DisplayName] = @DisplayName,
+	[Email] = @Email
+	WHERE	[UserId] = @AuthUserId
+
+
+	SELECT	*
+	FROM	[Client].[Users]
+	WHERE	[UserId] = @AuthUserId
+
+END</CustomProcSql>
+              <Parameters>
+                <FieldDefinition Name="AuthUserId" SqlType="int" DotNetType="int" JavaType="int" />
+                <FieldDefinition Name="DisplayName" SqlType="varchar" DotNetType="string" JavaType="String" />
+                <FieldDefinition Name="Email" SqlType="varchar" DotNetType="string" JavaType="String" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="TableVersion_Insert">
+            <Value Name="TableVersion_Insert" MethodName="Insert" ProcedureType="IdentityInsert" TableName="TableVersion" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="TableName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(150)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Version" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="TableVersion_Update">
+            <Value Name="TableVersion_Update" MethodName="Update" ProcedureType="NonQuery" TableName="TableVersion" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="TableId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="TableName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(150)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Version" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="TableVersion_Delete">
+            <Value Name="TableVersion_Delete" MethodName="Delete" ProcedureType="NonQuery" TableName="TableVersion" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="TableId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="TableVersion_Exists">
+            <Value Name="TableVersion_Exists" MethodName="Exists" ProcedureType="ExistsQuery" TableName="TableVersion" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="TableId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="TableVersion_Search">
+            <Value Name="TableVersion_Search" MethodName="Search" ProcedureType="Lookup" TableName="TableVersion" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="TableName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(150)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="TableVersion_SelectAll">
+            <Value Name="TableVersion_SelectAll" MethodName="SelectAll" ProcedureType="Lookup" TableName="TableVersion" IsStatic="false">
+              <Parameters />
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="TableVersion_SelectBy_TableId">
+            <Value Name="TableVersion_SelectBy_TableId" MethodName="SelectBy_TableId" ProcedureType="Lookup" TableName="TableVersion" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="TableId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Users_Exists">
+            <Value Name="Users_Exists" MethodName="Exists" ProcedureType="ExistsQuery" TableName="Users" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="UserId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Users_Search">
+            <Value Name="Users_Search" MethodName="Search" ProcedureType="Lookup" TableName="Users" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="DisplayName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Users_SelectAll">
+            <Value Name="Users_SelectAll" MethodName="SelectAll" ProcedureType="Lookup" TableName="Users" IsStatic="false">
+              <Parameters />
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+        </Items>
+      </Procedures>
+    </SchemaDefinition>
+    <SchemaDefinition Name="Data">
+      <Tables>
+        <Items>
+          <KeyCollectionItemOfTableDefinition Key="TableVersion">
+            <Value Name="TableVersion" IsView="false" IsSearchable="true" IsListable="false" VerifyConcurrency="false" IdentityField="TableId">
+              <Fields>
+                <Items>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="TableId">
+                    <Value Name="TableId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="TableName">
+                    <Value Name="TableName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(150)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="Version">
+                    <Value Name="Version" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                </Items>
+              </Fields>
+              <Indexes>
+                <Items>
+                  <KeyCollectionItemOfIndexDefinition Key="PK_TableVersion">
+                    <Value Name="PK_TableVersion" IsPrimaryKey="true" IsForeignKey="false" IsUniqueKey="true" IsClustered="true">
+                      <FieldNames>
+                        <string>TableId</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                </Items>
+              </Indexes>
+              <FKeys>
+                <Items />
+              </FKeys>
+              <KeyFields>
+                <string>TableId</string>
+              </KeyFields>
+            </Value>
+          </KeyCollectionItemOfTableDefinition>
+          <KeyCollectionItemOfTableDefinition Key="BinaryData">
+            <Value Name="BinaryData" IsView="false" IsSearchable="true" IsListable="false" VerifyConcurrency="false" IdentityField="BinaryDataId">
+              <Fields>
+                <Items>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="BinaryDataId">
+                    <Value Name="BinaryDataId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="DataType">
+                    <Value Name="DataType" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="Hash">
+                    <Value Name="Hash" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(64)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="Data">
+                    <Value Name="Data" SqlType="varbinary" DotNetType="byte[]" JavaType="byte[]" SqlTypeWithDimension="varbinary(max)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="DateCreated">
+                    <Value Name="DateCreated" SqlType="datetime" DotNetType="DateTime" JavaType="String" SqlTypeWithDimension="datetime" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                </Items>
+              </Fields>
+              <Indexes>
+                <Items>
+                  <KeyCollectionItemOfIndexDefinition Key="PK_BinaryData">
+                    <Value Name="PK_BinaryData" IsPrimaryKey="true" IsForeignKey="false" IsUniqueKey="true" IsClustered="true">
+                      <FieldNames>
+                        <string>BinaryDataId</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                  <KeyCollectionItemOfIndexDefinition Key="IX_BinaryData_Hash">
+                    <Value Name="IX_BinaryData_Hash" IsPrimaryKey="false" IsForeignKey="false" IsUniqueKey="true" IsClustered="false">
+                      <FieldNames>
+                        <string>Hash</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                </Items>
+              </Indexes>
+              <FKeys>
+                <Items />
+              </FKeys>
+              <KeyFields>
+                <string>BinaryDataId</string>
+              </KeyFields>
+            </Value>
+          </KeyCollectionItemOfTableDefinition>
+          <KeyCollectionItemOfTableDefinition Key="BinaryDataMoniker">
+            <Value Name="BinaryDataMoniker" IsView="false" IsSearchable="false" IsListable="false" VerifyConcurrency="false" IdentityField="BinaryDataMonikerId">
+              <Fields>
+                <Items>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="BinaryDataMonikerId">
+                    <Value Name="BinaryDataMonikerId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="BinaryDataId">
+                    <Value Name="BinaryDataId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="MonikerId">
+                    <Value Name="MonikerId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                </Items>
+              </Fields>
+              <Indexes>
+                <Items>
+                  <KeyCollectionItemOfIndexDefinition Key="PK_BinaryDataMoniker">
+                    <Value Name="PK_BinaryDataMoniker" IsPrimaryKey="true" IsForeignKey="false" IsUniqueKey="true" IsClustered="true">
+                      <FieldNames>
+                        <string>BinaryDataMonikerId</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                  <KeyCollectionItemOfIndexDefinition Key="FK_Data_BinaryDataMoniker_BinaryDataId">
+                    <Value Name="FK_Data_BinaryDataMoniker_BinaryDataId" IsPrimaryKey="false" IsForeignKey="true" IsUniqueKey="false" IsClustered="false">
+                      <FieldNames>
+                        <string>BinaryDataId</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                  <KeyCollectionItemOfIndexDefinition Key="FK_Data_BinaryDataMoniker_MonikerId">
+                    <Value Name="FK_Data_BinaryDataMoniker_MonikerId" IsPrimaryKey="false" IsForeignKey="true" IsUniqueKey="false" IsClustered="false">
+                      <FieldNames>
+                        <string>MonikerId</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                </Items>
+              </Indexes>
+              <FKeys>
+                <Items>
+                  <KeyCollectionItemOfFKeyDefinition Key="FK_Data_BinaryDataMoniker_BinaryDataId">
+                    <Value Name="FK_Data_BinaryDataMoniker_BinaryDataId" CascadeDelete="false" CascadeUpdate="false" ParentSchemaName="Data" ParentTableName="BinaryData" ChildSchemaName="Data" ChildTableName="BinaryDataMoniker">
+                      <ChildFieldNames>
+                        <string>BinaryDataId</string>
+                      </ChildFieldNames>
+                      <ParentFieldNames>
+                        <string>BinaryDataId</string>
+                      </ParentFieldNames>
+                    </Value>
+                  </KeyCollectionItemOfFKeyDefinition>
+                  <KeyCollectionItemOfFKeyDefinition Key="FK_Data_BinaryDataMoniker_MonikerId">
+                    <Value Name="FK_Data_BinaryDataMoniker_MonikerId" CascadeDelete="false" CascadeUpdate="false" ParentSchemaName="Data" ParentTableName="Moniker" ChildSchemaName="Data" ChildTableName="BinaryDataMoniker">
+                      <ChildFieldNames>
+                        <string>MonikerId</string>
+                      </ChildFieldNames>
+                      <ParentFieldNames>
+                        <string>MonikerId</string>
+                      </ParentFieldNames>
+                    </Value>
+                  </KeyCollectionItemOfFKeyDefinition>
+                </Items>
+              </FKeys>
+              <KeyFields>
+                <string>BinaryDataMonikerId</string>
+              </KeyFields>
+            </Value>
+          </KeyCollectionItemOfTableDefinition>
+          <KeyCollectionItemOfTableDefinition Key="Moniker">
+            <Value Name="Moniker" IsView="false" IsSearchable="true" IsListable="false" VerifyConcurrency="false" IdentityField="MonikerId">
+              <Fields>
+                <Items>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="MonikerId">
+                    <Value Name="MonikerId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="Text">
+                    <Value Name="Text" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(200)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="AliasForMoniker">
+                    <Value Name="AliasForMoniker" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="DateCreated">
+                    <Value Name="DateCreated" SqlType="datetime" DotNetType="DateTime" JavaType="String" SqlTypeWithDimension="datetime" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                </Items>
+              </Fields>
+              <Indexes>
+                <Items>
+                  <KeyCollectionItemOfIndexDefinition Key="PK_Moniker">
+                    <Value Name="PK_Moniker" IsPrimaryKey="true" IsForeignKey="false" IsUniqueKey="true" IsClustered="true">
+                      <FieldNames>
+                        <string>MonikerId</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                  <KeyCollectionItemOfIndexDefinition Key="IX_Moniker_Text">
+                    <Value Name="IX_Moniker_Text" IsPrimaryKey="false" IsForeignKey="false" IsUniqueKey="true" IsClustered="false">
+                      <FieldNames>
+                        <string>Text</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                </Items>
+              </Indexes>
+              <FKeys>
+                <Items />
+              </FKeys>
+              <KeyFields>
+                <string>MonikerId</string>
+              </KeyFields>
+            </Value>
+          </KeyCollectionItemOfTableDefinition>
+          <KeyCollectionItemOfTableDefinition Key="Query">
+            <Value Name="Query" IsView="false" IsSearchable="true" IsListable="false" VerifyConcurrency="false" IdentityField="QueryId">
+              <Fields>
+                <Items>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="QueryId">
+                    <Value Name="QueryId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="Text">
+                    <Value Name="Text" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="ProcessorUsed">
+                    <Value Name="ProcessorUsed" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="Exceptions">
+                    <Value Name="Exceptions" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="IsSuccess">
+                    <Value Name="IsSuccess" SqlType="bit" DotNetType="bool" JavaType="boolean" SqlTypeWithDimension="bit" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                </Items>
+              </Fields>
+              <Indexes>
+                <Items>
+                  <KeyCollectionItemOfIndexDefinition Key="PK_Query">
+                    <Value Name="PK_Query" IsPrimaryKey="true" IsForeignKey="false" IsUniqueKey="true" IsClustered="true">
+                      <FieldNames>
+                        <string>QueryId</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                </Items>
+              </Indexes>
+              <FKeys>
+                <Items />
+              </FKeys>
+              <KeyFields>
+                <string>QueryId</string>
+              </KeyFields>
+            </Value>
+          </KeyCollectionItemOfTableDefinition>
+        </Items>
+      </Tables>
+      <Procedures>
+        <Items>
+          <KeyCollectionItemOfProcedureDefinition Key="TableVersion_Insert">
+            <Value Name="TableVersion_Insert" MethodName="Insert" ProcedureType="IdentityInsert" TableName="TableVersion" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="TableName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(150)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Version" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="TableVersion_Update">
+            <Value Name="TableVersion_Update" MethodName="Update" ProcedureType="NonQuery" TableName="TableVersion" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="TableId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="TableName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(150)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Version" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="TableVersion_Delete">
+            <Value Name="TableVersion_Delete" MethodName="Delete" ProcedureType="NonQuery" TableName="TableVersion" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="TableId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="TableVersion_Exists">
+            <Value Name="TableVersion_Exists" MethodName="Exists" ProcedureType="ExistsQuery" TableName="TableVersion" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="TableId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="TableVersion_Search">
+            <Value Name="TableVersion_Search" MethodName="Search" ProcedureType="Lookup" TableName="TableVersion" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="TableName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(150)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="TableVersion_SelectAll">
+            <Value Name="TableVersion_SelectAll" MethodName="SelectAll" ProcedureType="Lookup" TableName="TableVersion" IsStatic="false">
+              <Parameters />
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="TableVersion_SelectBy_TableId">
+            <Value Name="TableVersion_SelectBy_TableId" MethodName="SelectBy_TableId" ProcedureType="Lookup" TableName="TableVersion" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="TableId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="BinaryData_Insert">
+            <Value Name="BinaryData_Insert" MethodName="Insert" ProcedureType="IdentityInsert" TableName="BinaryData" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="DataType" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Hash" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(64)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Data" SqlType="varbinary" DotNetType="byte[]" JavaType="byte[]" SqlTypeWithDimension="varbinary(max)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="DateCreated" SqlType="datetime" DotNetType="DateTime" JavaType="String" SqlTypeWithDimension="datetime" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="BinaryData_Update">
+            <Value Name="BinaryData_Update" MethodName="Update" ProcedureType="NonQuery" TableName="BinaryData" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="BinaryDataId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="DataType" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Hash" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(64)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Data" SqlType="varbinary" DotNetType="byte[]" JavaType="byte[]" SqlTypeWithDimension="varbinary(max)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="DateCreated" SqlType="datetime" DotNetType="DateTime" JavaType="String" SqlTypeWithDimension="datetime" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="BinaryData_Delete">
+            <Value Name="BinaryData_Delete" MethodName="Delete" ProcedureType="NonQuery" TableName="BinaryData" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="BinaryDataId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="BinaryData_Exists">
+            <Value Name="BinaryData_Exists" MethodName="Exists" ProcedureType="ExistsQuery" TableName="BinaryData" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="BinaryDataId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="BinaryData_Search">
+            <Value Name="BinaryData_Search" MethodName="Search" ProcedureType="Lookup" TableName="BinaryData" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="DataType" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Hash" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(64)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="BinaryData_SelectAll">
+            <Value Name="BinaryData_SelectAll" MethodName="SelectAll" ProcedureType="Lookup" TableName="BinaryData" IsStatic="false">
+              <Parameters />
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="BinaryData_SelectBy_BinaryDataId">
+            <Value Name="BinaryData_SelectBy_BinaryDataId" MethodName="SelectBy_BinaryDataId" ProcedureType="Lookup" TableName="BinaryData" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="BinaryDataId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="BinaryData_SelectBy_Hash">
+            <Value Name="BinaryData_SelectBy_Hash" MethodName="SelectBy_Hash" ProcedureType="Lookup" TableName="BinaryData" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Hash" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(64)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="BinaryDataMoniker_Insert">
+            <Value Name="BinaryDataMoniker_Insert" MethodName="Insert" ProcedureType="IdentityInsert" TableName="BinaryDataMoniker" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="BinaryDataId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="MonikerId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="BinaryDataMoniker_Update">
+            <Value Name="BinaryDataMoniker_Update" MethodName="Update" ProcedureType="NonQuery" TableName="BinaryDataMoniker" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="BinaryDataMonikerId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="BinaryDataId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="MonikerId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="BinaryDataMoniker_Delete">
+            <Value Name="BinaryDataMoniker_Delete" MethodName="Delete" ProcedureType="NonQuery" TableName="BinaryDataMoniker" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="BinaryDataMonikerId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="BinaryDataMoniker_Exists">
+            <Value Name="BinaryDataMoniker_Exists" MethodName="Exists" ProcedureType="ExistsQuery" TableName="BinaryDataMoniker" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="BinaryDataMonikerId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="BinaryDataMoniker_SelectAll">
+            <Value Name="BinaryDataMoniker_SelectAll" MethodName="SelectAll" ProcedureType="Lookup" TableName="BinaryDataMoniker" IsStatic="false">
+              <Parameters />
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="BinaryDataMoniker_SelectBy_BinaryDataMonikerId">
+            <Value Name="BinaryDataMoniker_SelectBy_BinaryDataMonikerId" MethodName="SelectBy_BinaryDataMonikerId" ProcedureType="Lookup" TableName="BinaryDataMoniker" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="BinaryDataMonikerId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="BinaryDataMoniker_SelectBy_BinaryDataId">
+            <Value Name="BinaryDataMoniker_SelectBy_BinaryDataId" MethodName="SelectBy_BinaryDataId" ProcedureType="Lookup" TableName="BinaryDataMoniker" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="BinaryDataId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="BinaryDataMoniker_SelectBy_MonikerId">
+            <Value Name="BinaryDataMoniker_SelectBy_MonikerId" MethodName="SelectBy_MonikerId" ProcedureType="Lookup" TableName="BinaryDataMoniker" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="MonikerId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Moniker_Insert">
+            <Value Name="Moniker_Insert" MethodName="Insert" ProcedureType="IdentityInsert" TableName="Moniker" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Text" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(200)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="AliasForMoniker" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="DateCreated" SqlType="datetime" DotNetType="DateTime" JavaType="String" SqlTypeWithDimension="datetime" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Moniker_Update">
+            <Value Name="Moniker_Update" MethodName="Update" ProcedureType="NonQuery" TableName="Moniker" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="MonikerId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Text" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(200)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="AliasForMoniker" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="DateCreated" SqlType="datetime" DotNetType="DateTime" JavaType="String" SqlTypeWithDimension="datetime" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Moniker_Delete">
+            <Value Name="Moniker_Delete" MethodName="Delete" ProcedureType="NonQuery" TableName="Moniker" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="MonikerId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Moniker_Exists">
+            <Value Name="Moniker_Exists" MethodName="Exists" ProcedureType="ExistsQuery" TableName="Moniker" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="MonikerId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Moniker_Search">
+            <Value Name="Moniker_Search" MethodName="Search" ProcedureType="Lookup" TableName="Moniker" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Text" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(200)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Moniker_SelectAll">
+            <Value Name="Moniker_SelectAll" MethodName="SelectAll" ProcedureType="Lookup" TableName="Moniker" IsStatic="false">
+              <Parameters />
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Moniker_SelectBy_MonikerId">
+            <Value Name="Moniker_SelectBy_MonikerId" MethodName="SelectBy_MonikerId" ProcedureType="Lookup" TableName="Moniker" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="MonikerId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Moniker_SelectBy_Text">
+            <Value Name="Moniker_SelectBy_Text" MethodName="SelectBy_Text" ProcedureType="Lookup" TableName="Moniker" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Text" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(200)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Query_Insert">
+            <Value Name="Query_Insert" MethodName="Insert" ProcedureType="IdentityInsert" TableName="Query" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Text" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="ProcessorUsed" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Exceptions" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="IsSuccess" SqlType="bit" DotNetType="bool" JavaType="boolean" SqlTypeWithDimension="bit" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Query_Update">
+            <Value Name="Query_Update" MethodName="Update" ProcedureType="NonQuery" TableName="Query" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="QueryId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Text" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="ProcessorUsed" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Exceptions" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="IsSuccess" SqlType="bit" DotNetType="bool" JavaType="boolean" SqlTypeWithDimension="bit" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Query_Delete">
+            <Value Name="Query_Delete" MethodName="Delete" ProcedureType="NonQuery" TableName="Query" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="QueryId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Query_Exists">
+            <Value Name="Query_Exists" MethodName="Exists" ProcedureType="ExistsQuery" TableName="Query" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="QueryId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Query_Search">
+            <Value Name="Query_Search" MethodName="Search" ProcedureType="Lookup" TableName="Query" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Text" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="ProcessorUsed" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Exceptions" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Query_SelectAll">
+            <Value Name="Query_SelectAll" MethodName="SelectAll" ProcedureType="Lookup" TableName="Query" IsStatic="false">
+              <Parameters />
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Query_SelectBy_QueryId">
+            <Value Name="Query_SelectBy_QueryId" MethodName="SelectBy_QueryId" ProcedureType="Lookup" TableName="Query" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="QueryId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+        </Items>
+      </Procedures>
+    </SchemaDefinition>
+    <SchemaDefinition Name="Auth">
+      <Tables>
+        <Items>
+          <KeyCollectionItemOfTableDefinition Key="TableVersion">
+            <Value Name="TableVersion" IsView="false" IsSearchable="true" IsListable="false" VerifyConcurrency="false" IdentityField="TableId">
+              <Fields>
+                <Items>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="TableId">
+                    <Value Name="TableId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="TableName">
+                    <Value Name="TableName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(150)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="Version">
+                    <Value Name="Version" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                </Items>
+              </Fields>
+              <Indexes>
+                <Items>
+                  <KeyCollectionItemOfIndexDefinition Key="PK_TableVersion">
+                    <Value Name="PK_TableVersion" IsPrimaryKey="true" IsForeignKey="false" IsUniqueKey="true" IsClustered="true">
+                      <FieldNames>
+                        <string>TableId</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                </Items>
+              </Indexes>
+              <FKeys>
+                <Items />
+              </FKeys>
+              <KeyFields>
+                <string>TableId</string>
+              </KeyFields>
+            </Value>
+          </KeyCollectionItemOfTableDefinition>
+          <KeyCollectionItemOfTableDefinition Key="Permission">
+            <Value Name="Permission" IsView="false" IsSearchable="true" IsListable="true" VerifyConcurrency="false" IdentityField="PermissionId" TitleColumn="Title">
+              <Fields>
+                <Items>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="PermissionId">
+                    <Value Name="PermissionId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="PermissionName">
+                    <Value Name="PermissionName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(100)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="Title">
+                    <Value Name="Title" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(150)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="IsRead">
+                    <Value Name="IsRead" SqlType="bit" DotNetType="bool" JavaType="boolean" SqlTypeWithDimension="bit" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                </Items>
+              </Fields>
+              <Indexes>
+                <Items>
+                  <KeyCollectionItemOfIndexDefinition Key="PK_Permission">
+                    <Value Name="PK_Permission" IsPrimaryKey="true" IsForeignKey="false" IsUniqueKey="true" IsClustered="true">
+                      <FieldNames>
+                        <string>PermissionId</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                </Items>
+              </Indexes>
+              <FKeys>
+                <Items />
+              </FKeys>
+              <KeyFields>
+                <string>PermissionId</string>
+              </KeyFields>
+            </Value>
+          </KeyCollectionItemOfTableDefinition>
+          <KeyCollectionItemOfTableDefinition Key="Role">
+            <Value Name="Role" IsView="false" IsSearchable="true" IsListable="true" VerifyConcurrency="false" IdentityField="RoleId" TitleColumn="Title">
+              <Fields>
+                <Items>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="RoleId">
+                    <Value Name="RoleId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="Title">
+                    <Value Name="Title" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="Description">
+                    <Value Name="Description" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="IsActive">
+                    <Value Name="IsActive" SqlType="bit" DotNetType="bool" JavaType="boolean" SqlTypeWithDimension="bit" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="ApplyToAnon">
+                    <Value Name="ApplyToAnon" SqlType="bit" DotNetType="bool" JavaType="boolean" SqlTypeWithDimension="bit" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="ApplyToAllUsers">
+                    <Value Name="ApplyToAllUsers" SqlType="bit" DotNetType="bool" JavaType="boolean" SqlTypeWithDimension="bit" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="PreventAddingUsers">
+                    <Value Name="PreventAddingUsers" SqlType="bit" DotNetType="bool" JavaType="boolean" SqlTypeWithDimension="bit" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="WINSID">
+                    <Value Name="WINSID" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                </Items>
+              </Fields>
+              <Indexes>
+                <Items>
+                  <KeyCollectionItemOfIndexDefinition Key="PK_Role">
+                    <Value Name="PK_Role" IsPrimaryKey="true" IsForeignKey="false" IsUniqueKey="true" IsClustered="true">
+                      <FieldNames>
+                        <string>RoleId</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                </Items>
+              </Indexes>
+              <FKeys>
+                <Items />
+              </FKeys>
+              <KeyFields>
+                <string>RoleId</string>
+              </KeyFields>
+            </Value>
+          </KeyCollectionItemOfTableDefinition>
+          <KeyCollectionItemOfTableDefinition Key="RolePermission">
+            <Value Name="RolePermission" IsView="false" IsSearchable="false" IsListable="false" VerifyConcurrency="false" IdentityField="RolePermissionId">
+              <Fields>
+                <Items>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="RolePermissionId">
+                    <Value Name="RolePermissionId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="RoleId">
+                    <Value Name="RoleId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="PermissionId">
+                    <Value Name="PermissionId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                </Items>
+              </Fields>
+              <Indexes>
+                <Items>
+                  <KeyCollectionItemOfIndexDefinition Key="PK_RolePermission">
+                    <Value Name="PK_RolePermission" IsPrimaryKey="true" IsForeignKey="false" IsUniqueKey="true" IsClustered="true">
+                      <FieldNames>
+                        <string>RolePermissionId</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                  <KeyCollectionItemOfIndexDefinition Key="FK_RolePermission_RoleId">
+                    <Value Name="FK_RolePermission_RoleId" IsPrimaryKey="false" IsForeignKey="true" IsUniqueKey="false" IsClustered="false">
+                      <FieldNames>
+                        <string>RoleId</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                  <KeyCollectionItemOfIndexDefinition Key="FK_RolePermission_PermissionId">
+                    <Value Name="FK_RolePermission_PermissionId" IsPrimaryKey="false" IsForeignKey="true" IsUniqueKey="false" IsClustered="false">
+                      <FieldNames>
+                        <string>PermissionId</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                </Items>
+              </Indexes>
+              <FKeys>
+                <Items>
+                  <KeyCollectionItemOfFKeyDefinition Key="FK_RolePermission_PermissionId">
+                    <Value Name="FK_RolePermission_PermissionId" CascadeDelete="false" CascadeUpdate="false" ParentSchemaName="Auth" ParentTableName="Permission" ChildSchemaName="Auth" ChildTableName="RolePermission">
+                      <ChildFieldNames>
+                        <string>PermissionId</string>
+                      </ChildFieldNames>
+                      <ParentFieldNames>
+                        <string>PermissionId</string>
+                      </ParentFieldNames>
+                    </Value>
+                  </KeyCollectionItemOfFKeyDefinition>
+                  <KeyCollectionItemOfFKeyDefinition Key="FK_RolePermission_RoleId">
+                    <Value Name="FK_RolePermission_RoleId" CascadeDelete="false" CascadeUpdate="false" ParentSchemaName="Auth" ParentTableName="Role" ChildSchemaName="Auth" ChildTableName="RolePermission">
+                      <ChildFieldNames>
+                        <string>RoleId</string>
+                      </ChildFieldNames>
+                      <ParentFieldNames>
+                        <string>RoleId</string>
+                      </ParentFieldNames>
+                    </Value>
+                  </KeyCollectionItemOfFKeyDefinition>
+                </Items>
+              </FKeys>
+              <KeyFields>
+                <string>RolePermissionId</string>
+              </KeyFields>
+            </Value>
+          </KeyCollectionItemOfTableDefinition>
+          <KeyCollectionItemOfTableDefinition Key="User">
+            <Value Name="User" IsView="false" IsSearchable="true" IsListable="true" VerifyConcurrency="false" IdentityField="UserId" TitleColumn="UserName">
+              <Fields>
+                <Items>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="UserId">
+                    <Value Name="UserId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="UserName">
+                    <Value Name="UserName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="Password">
+                    <Value Name="Password" SqlType="binary" DotNetType="byte[]" JavaType="byte[]" SqlTypeWithDimension="binary(16)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="DisplayName">
+                    <Value Name="DisplayName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="Email">
+                    <Value Name="Email" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(100)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="AuthToken">
+                    <Value Name="AuthToken" SqlType="uniqueidentifier" DotNetType="Guid" JavaType="UUID" SqlTypeWithDimension="uniqueidentifier" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="UserToken">
+                    <Value Name="UserToken" SqlType="uniqueidentifier" DotNetType="Guid" JavaType="UUID" SqlTypeWithDimension="uniqueidentifier" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="FailedLogins">
+                    <Value Name="FailedLogins" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="IsActive">
+                    <Value Name="IsActive" SqlType="bit" DotNetType="bool" JavaType="boolean" SqlTypeWithDimension="bit" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="WINSID">
+                    <Value Name="WINSID" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                </Items>
+              </Fields>
+              <Indexes>
+                <Items>
+                  <KeyCollectionItemOfIndexDefinition Key="PK_User">
+                    <Value Name="PK_User" IsPrimaryKey="true" IsForeignKey="false" IsUniqueKey="true" IsClustered="true">
+                      <FieldNames>
+                        <string>UserId</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                  <KeyCollectionItemOfIndexDefinition Key="IX_User_UserName">
+                    <Value Name="IX_User_UserName" IsPrimaryKey="false" IsForeignKey="false" IsUniqueKey="false" IsClustered="false">
+                      <FieldNames>
+                        <string>UserName</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                  <KeyCollectionItemOfIndexDefinition Key="IX_User_Email">
+                    <Value Name="IX_User_Email" IsPrimaryKey="false" IsForeignKey="false" IsUniqueKey="false" IsClustered="false">
+                      <FieldNames>
+                        <string>Email</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                  <KeyCollectionItemOfIndexDefinition Key="IX_User_UserToken">
+                    <Value Name="IX_User_UserToken" IsPrimaryKey="false" IsForeignKey="false" IsUniqueKey="false" IsClustered="false">
+                      <FieldNames>
+                        <string>UserToken</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                  <KeyCollectionItemOfIndexDefinition Key="IX_User_WINSID">
+                    <Value Name="IX_User_WINSID" IsPrimaryKey="false" IsForeignKey="false" IsUniqueKey="false" IsClustered="false">
+                      <FieldNames>
+                        <string>WINSID</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                </Items>
+              </Indexes>
+              <FKeys>
+                <Items />
+              </FKeys>
+              <KeyFields>
+                <string>UserId</string>
+              </KeyFields>
+            </Value>
+          </KeyCollectionItemOfTableDefinition>
+          <KeyCollectionItemOfTableDefinition Key="UserRole">
+            <Value Name="UserRole" IsView="false" IsSearchable="false" IsListable="false" VerifyConcurrency="false" IdentityField="UserRoleId">
+              <Fields>
+                <Items>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="UserRoleId">
+                    <Value Name="UserRoleId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="UserId">
+                    <Value Name="UserId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="RoleId">
+                    <Value Name="RoleId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                </Items>
+              </Fields>
+              <Indexes>
+                <Items>
+                  <KeyCollectionItemOfIndexDefinition Key="PK_UserRole">
+                    <Value Name="PK_UserRole" IsPrimaryKey="true" IsForeignKey="false" IsUniqueKey="true" IsClustered="true">
+                      <FieldNames>
+                        <string>UserRoleId</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                  <KeyCollectionItemOfIndexDefinition Key="FK_UserRole_RoleId">
+                    <Value Name="FK_UserRole_RoleId" IsPrimaryKey="false" IsForeignKey="true" IsUniqueKey="false" IsClustered="false">
+                      <FieldNames>
+                        <string>RoleId</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                  <KeyCollectionItemOfIndexDefinition Key="FK_UserRole_UserId">
+                    <Value Name="FK_UserRole_UserId" IsPrimaryKey="false" IsForeignKey="true" IsUniqueKey="false" IsClustered="false">
+                      <FieldNames>
+                        <string>UserId</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                </Items>
+              </Indexes>
+              <FKeys>
+                <Items>
+                  <KeyCollectionItemOfFKeyDefinition Key="FK_UserRole_RoleId">
+                    <Value Name="FK_UserRole_RoleId" CascadeDelete="false" CascadeUpdate="false" ParentSchemaName="Auth" ParentTableName="Role" ChildSchemaName="Auth" ChildTableName="UserRole">
+                      <ChildFieldNames>
+                        <string>RoleId</string>
+                      </ChildFieldNames>
+                      <ParentFieldNames>
+                        <string>RoleId</string>
+                      </ParentFieldNames>
+                    </Value>
+                  </KeyCollectionItemOfFKeyDefinition>
+                  <KeyCollectionItemOfFKeyDefinition Key="FK_UserRole_UserId">
+                    <Value Name="FK_UserRole_UserId" CascadeDelete="false" CascadeUpdate="false" ParentSchemaName="Auth" ParentTableName="User" ChildSchemaName="Auth" ChildTableName="UserRole">
+                      <ChildFieldNames>
+                        <string>UserId</string>
+                      </ChildFieldNames>
+                      <ParentFieldNames>
+                        <string>UserId</string>
+                      </ParentFieldNames>
+                    </Value>
+                  </KeyCollectionItemOfFKeyDefinition>
+                </Items>
+              </FKeys>
+              <KeyFields>
+                <string>UserRoleId</string>
+              </KeyFields>
+            </Value>
+          </KeyCollectionItemOfTableDefinition>
+        </Items>
+      </Tables>
+      <Procedures>
+        <Items>
+          <KeyCollectionItemOfProcedureDefinition Key="Permission_SelectBy_UserId">
+            <Value Name="Permission_SelectBy_UserId" MethodName="SelectBy_UserId" ProcedureType="Lookup" TableName="Permission" IsStatic="false">
+              <CustomProcSql>
+CREATE PROCEDURE [Auth].[Permission_SelectBy_UserId] 
+			@UserId int
+AS 
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT	
+			[PermissionId],
+			[PermissionName],
+			[Title],
+			[IsRead]
+	FROM	[Auth].[Permission]
+	WHERE	
+	[PermissionId] IN -- Anonymous / All users permissions
+	(	SELECT	[PermissionId]
+		FROM	[Auth].[RolePermission] RP
+		INNER JOIN
+				[Auth].[Role] R
+				ON RP.[RoleId] = R.[RoleId]
+		WHERE
+			(R.[ApplyToAnon] = 1 OR (R.[ApplyToAllUsers] = 1 AND @UserId &gt; 0))
+			AND R.[IsActive] = 1
+	) OR [PermissionId] IN -- Specifically assigned permissions
+	(	SELECT	[PermissionId]
+		FROM	[Auth].[RolePermission] RP
+		INNER JOIN
+				[Auth].[Role] R
+				ON RP.[RoleId] = R.[RoleId]
+		INNER JOIN 
+				[Auth].[UserRole] UR
+				ON R.[RoleId] = UR.[RoleId]
+		WHERE
+			UR.[UserId] = @UserId
+			AND R.[IsActive] = 1
+	)
+		
+
+END</CustomProcSql>
+              <Parameters>
+                <FieldDefinition Name="UserId" SqlType="int" DotNetType="int" JavaType="int" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="TableVersion_Insert">
+            <Value Name="TableVersion_Insert" MethodName="Insert" ProcedureType="IdentityInsert" TableName="TableVersion" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="TableName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(150)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Version" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="TableVersion_Update">
+            <Value Name="TableVersion_Update" MethodName="Update" ProcedureType="NonQuery" TableName="TableVersion" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="TableId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="TableName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(150)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Version" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="TableVersion_Delete">
+            <Value Name="TableVersion_Delete" MethodName="Delete" ProcedureType="NonQuery" TableName="TableVersion" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="TableId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="TableVersion_Exists">
+            <Value Name="TableVersion_Exists" MethodName="Exists" ProcedureType="ExistsQuery" TableName="TableVersion" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="TableId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="TableVersion_Search">
+            <Value Name="TableVersion_Search" MethodName="Search" ProcedureType="Lookup" TableName="TableVersion" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="TableName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(150)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="TableVersion_SelectAll">
+            <Value Name="TableVersion_SelectAll" MethodName="SelectAll" ProcedureType="Lookup" TableName="TableVersion" IsStatic="false">
+              <Parameters />
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="TableVersion_SelectBy_TableId">
+            <Value Name="TableVersion_SelectBy_TableId" MethodName="SelectBy_TableId" ProcedureType="Lookup" TableName="TableVersion" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="TableId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Permission_Insert">
+            <Value Name="Permission_Insert" MethodName="Insert" ProcedureType="IdentityInsert" TableName="Permission" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="PermissionName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(100)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Title" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(150)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="IsRead" SqlType="bit" DotNetType="bool" JavaType="boolean" SqlTypeWithDimension="bit" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Permission_Update">
+            <Value Name="Permission_Update" MethodName="Update" ProcedureType="NonQuery" TableName="Permission" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="PermissionId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="PermissionName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(100)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Title" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(150)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="IsRead" SqlType="bit" DotNetType="bool" JavaType="boolean" SqlTypeWithDimension="bit" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Permission_Delete">
+            <Value Name="Permission_Delete" MethodName="Delete" ProcedureType="NonQuery" TableName="Permission" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="PermissionId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Permission_Exists">
+            <Value Name="Permission_Exists" MethodName="Exists" ProcedureType="ExistsQuery" TableName="Permission" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="PermissionId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Permission_Search">
+            <Value Name="Permission_Search" MethodName="Search" ProcedureType="Lookup" TableName="Permission" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="PermissionName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(100)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Title" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(150)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Permission_SelectAll">
+            <Value Name="Permission_SelectAll" MethodName="SelectAll" ProcedureType="Lookup" TableName="Permission" IsStatic="false">
+              <Parameters />
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Permission_List">
+            <Value Name="Permission_List" MethodName="List" ProcedureType="List" TableName="Permission" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Title" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(150)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Permission_SelectBy_PermissionId">
+            <Value Name="Permission_SelectBy_PermissionId" MethodName="SelectBy_PermissionId" ProcedureType="Lookup" TableName="Permission" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="PermissionId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Role_Insert">
+            <Value Name="Role_Insert" MethodName="Insert" ProcedureType="IdentityInsert" TableName="Role" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Title" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Description" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="IsActive" SqlType="bit" DotNetType="bool" JavaType="boolean" SqlTypeWithDimension="bit" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="ApplyToAnon" SqlType="bit" DotNetType="bool" JavaType="boolean" SqlTypeWithDimension="bit" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="ApplyToAllUsers" SqlType="bit" DotNetType="bool" JavaType="boolean" SqlTypeWithDimension="bit" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="PreventAddingUsers" SqlType="bit" DotNetType="bool" JavaType="boolean" SqlTypeWithDimension="bit" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="WINSID" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Role_Update">
+            <Value Name="Role_Update" MethodName="Update" ProcedureType="NonQuery" TableName="Role" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="RoleId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Title" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Description" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="IsActive" SqlType="bit" DotNetType="bool" JavaType="boolean" SqlTypeWithDimension="bit" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="ApplyToAnon" SqlType="bit" DotNetType="bool" JavaType="boolean" SqlTypeWithDimension="bit" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="ApplyToAllUsers" SqlType="bit" DotNetType="bool" JavaType="boolean" SqlTypeWithDimension="bit" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="PreventAddingUsers" SqlType="bit" DotNetType="bool" JavaType="boolean" SqlTypeWithDimension="bit" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="WINSID" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Role_Delete">
+            <Value Name="Role_Delete" MethodName="Delete" ProcedureType="NonQuery" TableName="Role" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="RoleId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Role_Exists">
+            <Value Name="Role_Exists" MethodName="Exists" ProcedureType="ExistsQuery" TableName="Role" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="RoleId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Role_Search">
+            <Value Name="Role_Search" MethodName="Search" ProcedureType="Lookup" TableName="Role" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Title" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Description" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="WINSID" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Role_SelectAll">
+            <Value Name="Role_SelectAll" MethodName="SelectAll" ProcedureType="Lookup" TableName="Role" IsStatic="false">
+              <Parameters />
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Role_List">
+            <Value Name="Role_List" MethodName="List" ProcedureType="List" TableName="Role" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Title" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Role_SelectBy_RoleId">
+            <Value Name="Role_SelectBy_RoleId" MethodName="SelectBy_RoleId" ProcedureType="Lookup" TableName="Role" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="RoleId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="RolePermission_Insert">
+            <Value Name="RolePermission_Insert" MethodName="Insert" ProcedureType="IdentityInsert" TableName="RolePermission" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="RoleId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="PermissionId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="RolePermission_Update">
+            <Value Name="RolePermission_Update" MethodName="Update" ProcedureType="NonQuery" TableName="RolePermission" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="RolePermissionId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="RoleId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="PermissionId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="RolePermission_Delete">
+            <Value Name="RolePermission_Delete" MethodName="Delete" ProcedureType="NonQuery" TableName="RolePermission" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="RolePermissionId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="RolePermission_Exists">
+            <Value Name="RolePermission_Exists" MethodName="Exists" ProcedureType="ExistsQuery" TableName="RolePermission" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="RolePermissionId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="RolePermission_SelectAll">
+            <Value Name="RolePermission_SelectAll" MethodName="SelectAll" ProcedureType="Lookup" TableName="RolePermission" IsStatic="false">
+              <Parameters />
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="RolePermission_SelectBy_RolePermissionId">
+            <Value Name="RolePermission_SelectBy_RolePermissionId" MethodName="SelectBy_RolePermissionId" ProcedureType="Lookup" TableName="RolePermission" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="RolePermissionId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="RolePermission_SelectBy_RoleId">
+            <Value Name="RolePermission_SelectBy_RoleId" MethodName="SelectBy_RoleId" ProcedureType="Lookup" TableName="RolePermission" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="RoleId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="RolePermission_SelectBy_PermissionId">
+            <Value Name="RolePermission_SelectBy_PermissionId" MethodName="SelectBy_PermissionId" ProcedureType="Lookup" TableName="RolePermission" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="PermissionId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="User_Insert">
+            <Value Name="User_Insert" MethodName="Insert" ProcedureType="IdentityInsert" TableName="User" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="UserName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Password" SqlType="binary" DotNetType="byte[]" JavaType="byte[]" SqlTypeWithDimension="binary(16)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="DisplayName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Email" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(100)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="AuthToken" SqlType="uniqueidentifier" DotNetType="Guid" JavaType="UUID" SqlTypeWithDimension="uniqueidentifier" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="UserToken" SqlType="uniqueidentifier" DotNetType="Guid" JavaType="UUID" SqlTypeWithDimension="uniqueidentifier" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="FailedLogins" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="IsActive" SqlType="bit" DotNetType="bool" JavaType="boolean" SqlTypeWithDimension="bit" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="WINSID" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="User_Update">
+            <Value Name="User_Update" MethodName="Update" ProcedureType="NonQuery" TableName="User" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="UserId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="UserName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Password" SqlType="binary" DotNetType="byte[]" JavaType="byte[]" SqlTypeWithDimension="binary(16)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="DisplayName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Email" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(100)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="AuthToken" SqlType="uniqueidentifier" DotNetType="Guid" JavaType="UUID" SqlTypeWithDimension="uniqueidentifier" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="UserToken" SqlType="uniqueidentifier" DotNetType="Guid" JavaType="UUID" SqlTypeWithDimension="uniqueidentifier" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="FailedLogins" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="IsActive" SqlType="bit" DotNetType="bool" JavaType="boolean" SqlTypeWithDimension="bit" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="WINSID" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="User_Delete">
+            <Value Name="User_Delete" MethodName="Delete" ProcedureType="NonQuery" TableName="User" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="UserId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="User_Exists">
+            <Value Name="User_Exists" MethodName="Exists" ProcedureType="ExistsQuery" TableName="User" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="UserId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="User_Search">
+            <Value Name="User_Search" MethodName="Search" ProcedureType="Lookup" TableName="User" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="UserName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="DisplayName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Email" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(100)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="WINSID" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="User_SelectAll">
+            <Value Name="User_SelectAll" MethodName="SelectAll" ProcedureType="Lookup" TableName="User" IsStatic="false">
+              <Parameters />
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="User_List">
+            <Value Name="User_List" MethodName="List" ProcedureType="List" TableName="User" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="UserName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="User_SelectBy_UserId">
+            <Value Name="User_SelectBy_UserId" MethodName="SelectBy_UserId" ProcedureType="Lookup" TableName="User" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="UserId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="User_SelectBy_UserName">
+            <Value Name="User_SelectBy_UserName" MethodName="SelectBy_UserName" ProcedureType="Lookup" TableName="User" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="UserName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="User_SelectBy_Email">
+            <Value Name="User_SelectBy_Email" MethodName="SelectBy_Email" ProcedureType="Lookup" TableName="User" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Email" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(100)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="User_SelectBy_UserToken">
+            <Value Name="User_SelectBy_UserToken" MethodName="SelectBy_UserToken" ProcedureType="Lookup" TableName="User" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="UserToken" SqlType="uniqueidentifier" DotNetType="Guid" JavaType="UUID" SqlTypeWithDimension="uniqueidentifier" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="User_SelectBy_WINSID">
+            <Value Name="User_SelectBy_WINSID" MethodName="SelectBy_WINSID" ProcedureType="Lookup" TableName="User" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="WINSID" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="UserRole_Insert">
+            <Value Name="UserRole_Insert" MethodName="Insert" ProcedureType="IdentityInsert" TableName="UserRole" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="UserId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="RoleId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="UserRole_Update">
+            <Value Name="UserRole_Update" MethodName="Update" ProcedureType="NonQuery" TableName="UserRole" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="UserRoleId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="UserId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="RoleId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="UserRole_Delete">
+            <Value Name="UserRole_Delete" MethodName="Delete" ProcedureType="NonQuery" TableName="UserRole" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="UserRoleId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="UserRole_Exists">
+            <Value Name="UserRole_Exists" MethodName="Exists" ProcedureType="ExistsQuery" TableName="UserRole" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="UserRoleId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="UserRole_SelectAll">
+            <Value Name="UserRole_SelectAll" MethodName="SelectAll" ProcedureType="Lookup" TableName="UserRole" IsStatic="false">
+              <Parameters />
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="UserRole_SelectBy_UserRoleId">
+            <Value Name="UserRole_SelectBy_UserRoleId" MethodName="SelectBy_UserRoleId" ProcedureType="Lookup" TableName="UserRole" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="UserRoleId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="UserRole_SelectBy_RoleId">
+            <Value Name="UserRole_SelectBy_RoleId" MethodName="SelectBy_RoleId" ProcedureType="Lookup" TableName="UserRole" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="RoleId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="UserRole_SelectBy_UserId">
+            <Value Name="UserRole_SelectBy_UserId" MethodName="SelectBy_UserId" ProcedureType="Lookup" TableName="UserRole" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="UserId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+        </Items>
+      </Procedures>
+    </SchemaDefinition>
+  </Schemas>
+</DatabaseDefinition>

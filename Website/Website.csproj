@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{46CEF5BB-4B29-4D38-BB0F-CDF365C385B4}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Website</RootNamespace>
+    <AssemblyName>Website</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activation" />
+    <Reference Include="System.ServiceModel.Routing" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\images\favicon.png" />
+    <Content Include="Content\images\icon-facebook.png" />
+    <Content Include="Content\images\icon-twitter.png" />
+    <Content Include="Content\images\icon-youtube.png" />
+    <Content Include="Content\images\large_loading.gif" />
+    <Content Include="Content\images\loading.gif" />
+    <Content Include="Scripts\ViewModels\Gen\CALI.Client.Users.viewmodel.js" />
+    <Content Include="Scripts\ViewModels\Gen\dal.AuthProviderClass.js" />
+    <Content Include="Scripts\ViewModels\Gen\dal.js" />
+    <Content Include="Scripts\ViewModels\Gen\dal.ViewModelBaseClass.js" />
+    <Content Include="Scripts\ViewModels\Gen\StarterIndex.html" />
+    <Content Include="Scripts\ViewModels\Gen\ui.js" />
+    <Content Include="Scripts\ViewModels\Gen\Util\jquery.cookie.js" />
+    <Content Include="Scripts\ViewModels\Gen\Util\jquery.DynamicTime.js" />
+    <Content Include="Scripts\ViewModels\Gen\Util\json2.js" />
+    <Content Include="Scripts\ViewModels\Gen\Util\md5.js" />
+    <Content Include="Scripts\Views\Gen\App.Anon.Welcome.html" />
+    <Content Include="Scripts\Views\Gen\App.Auth.Welcome.html" />
+    <Content Include="Scripts\Views\Gen\CALI.app.js" />
+    <Content Include="Scripts\Views\Gen\CALI.Auth.controller.js" />
+    <Content Include="Scripts\Views\Gen\CALI.Auth.template.html" />
+    <Content Include="Scripts\Views\Gen\CALI.Navigation.controller.js" />
+    <Content Include="Scripts\Views\Gen\CALI.Navigation.template.html" />
+    <Content Include="Scripts\Views\Gen\html\CALI.Client.Users.template.html" />
+    <Content Include="Scripts\Views\Gen\js\CALI.Client.Users.controller.js" />
+    <Content Include="Scripts\Views\Gen\ResetEmailTemplate.html" />
+    <Content Include="Style\bootstrap\css\bootstrap-responsive.css" />
+    <Content Include="Style\bootstrap\css\bootstrap.css" />
+    <Content Include="Style\bootstrap\css\bootstrap.custom.css" />
+    <Content Include="Style\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Style\bootstrap\img\glyphicons-halflings-white.png" />
+    <Content Include="Style\bootstrap\img\glyphicons-halflings.png" />
+    <Content Include="Style\bootstrap\js\bootstrap.js" />
+    <Content Include="Style\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Style\fullcalendar.css" />
+    <Content Include="Style\fullcalendar.print.css" />
+    <Content Include="Style\i\tablebutton_view.png" />
+    <Content Include="Style\i\tablebutton_edit.png" />
+    <Content Include="Style\i\button_addCash.png" />
+    <Content Include="Style\i\button_back.png" />
+    <Content Include="Style\i\button_info.png" />
+    <Content Include="Style\i\clickable_hover.gif" />
+    <Content Include="Style\i\clickable_navHover.png" />
+    <Content Include="Style\i\indicator_grey.gif" />
+    <Content Include="Style\i\indicator_orange.gif" />
+    <Content Include="Style\i\indicator_red.gif" />
+    <Content Include="Style\i\indicator_white.gif" />
+    <Content Include="Style\i\indicator_yellow.gif" />
+    <Content Include="Style\i\large_loading.gif" />
+    <Content Include="Style\i\loading.gif" />
+    <Content Include="Style\i\selectable_hover.gif" />
+    <Content Include="Style\i\selectable_selected.gif" />
+    <Content Include="Global.asax" />
+    <Content Include="Style\dataTables.css" />
+    <Content Include="Style\style.ui.css" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Generated\Authentication.cs" />
+    <Compile Include="Services\Generated\AuthenticationBase.cs" />
+    <Compile Include="Services\Generated\AuthSvc.cs" />
+    <Compile Include="Services\Generated\AuthSvcBase.cs" />
+    <Compile Include="Services\Generated\Client\Users\UsersService.cs" />
+    <Compile Include="Services\Generated\Client\Users\UsersServiceBase.cs" />
+    <Compile Include="Services\Generated\Client\Users\UsersServiceInterface.cs" />
+    <Compile Include="Services\Generated\IAuthSvc.cs" />
+    <Compile Include="Services\Generated\ServiceBase.cs" />
+    <Compile Include="Services\Generated\ServiceRegister.cs" />
+    <Compile Include="Services\Generated\ServiceRegisterBase.cs" />
+    <Compile Include="Services\Generated\SpecificCacheContainer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Database\Database.csproj">
+      <Project>{211EBE27-BFB6-4327-B025-646D3E3A5F2A}</Project>
+      <Name>Database</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logic.Common\Logic.Common.csproj">
+      <Project>{b11ae8d8-1f32-4e4b-ac72-4ed28cbb48d9}</Project>
+      <Name>Logic.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>13873</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:48720/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

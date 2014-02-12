@@ -1,0 +1,45 @@
+<script src="Scripts/Views/gen/CALI.Navigation.controller.js"></script><!-- Edit this, remove /gen/-->
+<div data-ng-controller="CALINavigationController">
+    <div class="navbar navbar-inverse navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#"><img src="/Content/images/favicon.png"/> {{Title}}</a>
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li data-ng-repeat="Item in Items" class="{{Item.Css}} hide-{{Item.AuthOnly && !IsAuthenticated()}}"><a href="{{Item.Url}}"><i class="glyphicon glyphicon-{{Item.Icon}}"></i> {{Item.Text}}</a></li>
+                </ul>
+                <div class="nav-right" ng-include="'/scripts/views/gen/CALI.Auth.template.html'"></div>
+            </div>
+        </div>
+    </div>
+    <style>
+         @media (min-width: 768px) {
+            .nav-right {
+                float: right;
+            }
+        }
+        .navbar-inverse .navbar-nav li a:hover, .navbar-inverse .navbar-nav li a:focus,
+        .navbar-inverse .navbar-brand:hover, .navbar-inverse .navbar-brand:focus {
+            color: #18bc9c;
+        }
+        .navbar-inverse .navbar-nav .dropdown a:hover .caret {
+            border-top-color: #18bc9c;
+            border-bottom-color: #18bc9c;
+        }
+        .navbar-inverse .navbar-nav>.open a .caret, .navbar-inverse .navbar-nav .open a:hover .caret, .navbar-inverse .navbar-nav .open a:focus .caret {
+            border-top-color: #fff;
+            border-bottom-color: #fff;
+        }
+        
+        .navbar .glyphicon {
+            margin-right: 10px;
+        }
+    </style>
+</div>
