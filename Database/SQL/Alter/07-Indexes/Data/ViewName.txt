@@ -1,0 +1,7 @@
+--Schemabinding views need a unique clustered index before you can create other indexes
+CREATE UNIQUE CLUSTERED INDEX [IX_ViewName_ViewKeyFields] 
+	ON [Data].[ViewName] ([ViewKeyFields])
+
+--Other indexes follow here
+CREATE NONCLUSTERED INDEX [IX_ViewName_IndexedFields] 
+	ON [Data].[ViewName] ([Indexed],[Fields],[Here])

@@ -1,0 +1,21 @@
+-----------------------------------------------------------------------------------
+--This is a custom procedure
+--Written by: YOUR NAME
+--Description:
+--   This does things
+-----------------------------------------------------------------------------------
+
+IF EXISTS(SELECT * FROM [dbo].[sysobjects] WHERE 
+	ID=object_id(N'[Data].[TABLENAME_PROCEDURENAME]')
+	AND OBJECTPROPERTY(id, N'IsProcedure')=1) 
+DROP PROC [Data].[TABLENAME_PROCEDURENAME]
+GO--
+CREATE PROCEDURE [Data].[TABLENAME_PROCEDURENAME] 
+			@Parameter1 int
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	--Your Awesome SQL here
+
+END

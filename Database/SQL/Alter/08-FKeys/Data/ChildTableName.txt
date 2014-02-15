@@ -1,0 +1,3 @@
+ALTER TABLE [Data].[ChildTableName]
+ADD	CONSTRAINT [FK_ChildTableName_ChildFields] FOREIGN KEY ([Child],[Fields]) REFERENCES [Data].[ParentTable] ([Parent],[Fields])
+,	CONSTRAINT [FK_ChildTableName_ChildFields] FOREIGN KEY ([Child],[Fields]) REFERENCES [Data].[ParentTable] ([Parent],[Fields])

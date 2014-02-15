@@ -1,0 +1,36 @@
+DECLARE @FromVersion INT;			SET @FromVersion = 0;
+DECLARE @TableName VARCHAR(150);	SET @TableName = '[Data].[__TableName]';
+
+DECLARE @ToVersion INT;				SET @ToVersion = @FromVersion + 1;
+IF EXISTS(SELECT * FROM [Data].[TableVersion] WHERE [Version] = @FromVersion AND [TableName] = @TableName) BEGIN
+
+	DECLARE @UpdateSql NVARCHAR(MAX);
+	SET @UpdateSql = '
+		--PUT YOUR UPDATE SQL TO RUN HERE
+	';
+
+
+	BEGIN TRANSACTION
+
+	--Run update sql
+	DECLARE @HadError int;
+	EXEC sp_executesql @statement = @UpdateSql
+
+	--Update table version if no errors
+	SET @HadError = @@ERROR
+	IF @HadError = 0
+		UPDATE	[Data].[TableVersion]
+		SET		[Version]=@ToVersion
+		WHERE	[TableName]=@TableName
+		AND		[Version]=@FromVersion
+
+		
+	IF @HadError = 0 BEGIN
+		PRINT 'success: ' + @TableName + ' V' + CAST(@FromVersion as varchar(max)) + ' -> V' + CAST(@ToVersion as varchar(max)) + ' Committed.'
+		COMMIT
+	END
+	IF @HadError != 0 BEGIN
+		PRINT '***ERROR:  ' + @TableName + ' V' + CAST(@FromVersion as varchar(max)) + ' -> V' + CAST(@ToVersion as varchar(max)) + ' Rolled back.'
+		ROLLBACK
+	END
+END
