@@ -23,16 +23,19 @@ namespace CALI.Database.Logic.Data
 		/// Run Query_Insert.
 		/// </summary>
 		/// <param name="fldText">Value for Text</param>
+		/// <param name="fldPoviderSource">Value for PoviderSource</param>
 		/// <param name="fldProcessorUsed">Value for ProcessorUsed</param>
 		/// <param name="fldExceptions">Value for Exceptions</param>
 		/// <param name="fldIsSuccess">Value for IsSuccess</param>
 		public static int? InsertNow(string fldText
+, string fldPoviderSource
 , string fldProcessorUsed
 , string fldExceptions
 , bool fldIsSuccess
 )
 		{
 			return (new QueryLogic()).Insert(fldText
+, fldPoviderSource
 , fldProcessorUsed
 , fldExceptions
 , fldIsSuccess
@@ -42,18 +45,21 @@ namespace CALI.Database.Logic.Data
 		/// Run Query_Insert.
 		/// </summary>
 		/// <param name="fldText">Value for Text</param>
+		/// <param name="fldPoviderSource">Value for PoviderSource</param>
 		/// <param name="fldProcessorUsed">Value for ProcessorUsed</param>
 		/// <param name="fldExceptions">Value for Exceptions</param>
 		/// <param name="fldIsSuccess">Value for IsSuccess</param>
 		/// <param name="connection">The SqlConnection to use</param>
 		/// <param name="transaction">The SqlTransaction to use</param>
 		public static int? InsertNow(string fldText
+, string fldPoviderSource
 , string fldProcessorUsed
 , string fldExceptions
 , bool fldIsSuccess
 , SqlConnection connection, SqlTransaction transaction)
 		{
 			return (new QueryLogic()).Insert(fldText
+, fldPoviderSource
 , fldProcessorUsed
 , fldExceptions
 , fldIsSuccess
@@ -108,12 +114,14 @@ namespace CALI.Database.Logic.Data
 		/// </summary>
 		/// <param name="fldQueryId">Value for QueryId</param>
 		/// <param name="fldText">Value for Text</param>
+		/// <param name="fldPoviderSource">Value for PoviderSource</param>
 		/// <param name="fldProcessorUsed">Value for ProcessorUsed</param>
 		/// <param name="fldExceptions">Value for Exceptions</param>
 		/// <param name="fldIsSuccess">Value for IsSuccess</param>
 		/// <returns>The number of rows affected.</returns>
 		public static int UpdateNow(int fldQueryId
 , string fldText
+, string fldPoviderSource
 , string fldProcessorUsed
 , string fldExceptions
 , bool fldIsSuccess
@@ -121,6 +129,7 @@ namespace CALI.Database.Logic.Data
 		{
 			return (new QueryLogic()).Update(fldQueryId
 , fldText
+, fldPoviderSource
 , fldProcessorUsed
 , fldExceptions
 , fldIsSuccess
@@ -132,6 +141,7 @@ namespace CALI.Database.Logic.Data
 		/// </summary>
 		/// <param name="fldQueryId">Value for QueryId</param>
 		/// <param name="fldText">Value for Text</param>
+		/// <param name="fldPoviderSource">Value for PoviderSource</param>
 		/// <param name="fldProcessorUsed">Value for ProcessorUsed</param>
 		/// <param name="fldExceptions">Value for Exceptions</param>
 		/// <param name="fldIsSuccess">Value for IsSuccess</param>
@@ -140,6 +150,7 @@ namespace CALI.Database.Logic.Data
 		/// <returns>The number of rows affected.</returns>
 		public static int UpdateNow(int fldQueryId
 , string fldText
+, string fldPoviderSource
 , string fldProcessorUsed
 , string fldExceptions
 , bool fldIsSuccess
@@ -147,6 +158,7 @@ namespace CALI.Database.Logic.Data
 		{
 			return (new QueryLogic()).Update(fldQueryId
 , fldText
+, fldPoviderSource
 , fldProcessorUsed
 , fldExceptions
 , fldIsSuccess
@@ -293,16 +305,19 @@ namespace CALI.Database.Logic.Data
 		/// Run Query_Search, and return results as a list of QueryRow.
 		/// </summary>
 		/// <param name="fldText">Value for Text</param>
+		/// <param name="fldPoviderSource">Value for PoviderSource</param>
 		/// <param name="fldProcessorUsed">Value for ProcessorUsed</param>
 		/// <param name="fldExceptions">Value for Exceptions</param>
 		/// <returns>A collection of QueryRow.</returns>
 		public static List<QueryContract> SearchNow(string fldText
+, string fldPoviderSource
 , string fldProcessorUsed
 , string fldExceptions
 )
 		{
 			var driver = new QueryLogic();
 			driver.Search(fldText
+, fldPoviderSource
 , fldProcessorUsed
 , fldExceptions
 );
@@ -313,18 +328,21 @@ namespace CALI.Database.Logic.Data
 		/// Run Query_Search, and return results as a list of QueryRow.
 		/// </summary>
 		/// <param name="fldText">Value for Text</param>
+		/// <param name="fldPoviderSource">Value for PoviderSource</param>
 		/// <param name="fldProcessorUsed">Value for ProcessorUsed</param>
 		/// <param name="fldExceptions">Value for Exceptions</param>
 		/// <param name="connection">The SqlConnection to use</param>
 		/// <param name="transaction">The SqlTransaction to use</param>
 		/// <returns>A collection of QueryRow.</returns>
 		public static List<QueryContract> SearchNow(string fldText
+, string fldPoviderSource
 , string fldProcessorUsed
 , string fldExceptions
 , SqlConnection connection, SqlTransaction transaction)
 		{
 			var driver = new QueryLogic();
 			driver.Search(fldText
+, fldPoviderSource
 , fldProcessorUsed
 , fldExceptions
 , connection, transaction);

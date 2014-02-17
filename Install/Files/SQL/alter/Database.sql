@@ -433,6 +433,19 @@ BEGIN
 END
 
 GO--
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[Data].[Log]') AND type in (N'U'))
+BEGIN
+	CREATE TABLE [Data].[Log](
+		[LogId] int IDENTITY(1,1) NOT NULL,
+		[RunOnMachineName] varchar(50)  NOT NULL,
+		[LogContents] varchar(max)  NOT NULL,
+		[RunTime] datetime  NOT NULL,
+		CONSTRAINT [PK_Log] PRIMARY KEY CLUSTERED ([LogId])
+	)  
+	INSERT INTO [Data].[TableVersion]([TableName],[Version]) VALUES('[Data].[Log]', 0)
+END
+
+GO--
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[Data].[Moniker]') AND type in (N'U'))
 BEGIN
 	CREATE TABLE [Data].[Moniker](
@@ -451,6 +464,7 @@ BEGIN
 	CREATE TABLE [Data].[Query](
 		[QueryId] int IDENTITY(1,1) NOT NULL,
 		[Text] varchar(max)  NOT NULL,
+		[PoviderSource] varchar(max)  NULL,
 		[ProcessorUsed] varchar(max)  NULL,
 		[Exceptions] varchar(max)  NULL,
 		[IsSuccess] bit  NOT NULL,
@@ -2578,6 +2592,182 @@ GO--
 --Make sure you follow the same expected interface of parameters, and resultsets.--
 -----------------------------------------------------------------------------------
 
+IF EXISTS(SELECT * FROM [dbo].[sysobjects] WHERE ID=object_id(N'[Data].[Log_Delete]') AND OBJECTPROPERTY(id, N'IsProcedure')=1) DROP PROC [Data].[Log_Delete]
+
+GO--
+
+CREATE PROCEDURE [Data].[Log_Delete] 
+			@LogId int
+AS --Generated--
+BEGIN
+
+	DELETE FROM	[Data].[Log]
+	WHERE	[LogId] = @LogId
+
+END
+GO--
+-----------------------------------------------------------------------------------
+--Do not modify this file, instead use an alter proc to over-write the procedure.--
+--Make sure you follow the same expected interface of parameters, and resultsets.--
+-----------------------------------------------------------------------------------
+
+IF EXISTS(SELECT * FROM [dbo].[sysobjects] WHERE ID=object_id(N'[Data].[Log_Exists]') AND OBJECTPROPERTY(id, N'IsProcedure')=1) DROP PROC [Data].[Log_Exists]
+
+GO--
+
+CREATE PROCEDURE [Data].[Log_Exists]
+			@LogId int
+AS --Generated--
+BEGIN
+	SET NOCOUNT ON;
+
+	IF EXISTS(
+		SELECT * FROM [Data].[Log]
+		WHERE	[LogId] = @LogId
+	) BEGIN
+		SELECT CAST(1 as bit) as [Exists]
+	END ELSE BEGIN
+		SELECT CAST(0 as bit) as [Exists]
+	END
+END
+
+GO--
+-----------------------------------------------------------------------------------
+--Do not modify this file, instead use an alter proc to over-write the procedure.--
+--Make sure you follow the same expected interface of parameters, and resultsets.--
+-----------------------------------------------------------------------------------
+
+IF EXISTS(SELECT * FROM [dbo].[sysobjects] WHERE ID=object_id(N'[Data].[Log_Insert]') AND OBJECTPROPERTY(id, N'IsProcedure')=1) DROP PROC [Data].[Log_Insert]
+
+GO--
+
+CREATE PROCEDURE [Data].[Log_Insert]
+			@RunOnMachineName varchar(50),
+			@LogContents varchar(max),
+			@RunTime datetime
+AS --Generated--
+BEGIN
+
+	INSERT INTO [Data].[Log] (
+
+			[RunOnMachineName],
+			[LogContents],
+			[RunTime]
+	) VALUES (
+
+			@RunOnMachineName,
+			@LogContents,
+			@RunTime
+	)
+
+	SELECT CAST(SCOPE_IDENTITY() AS int) AS [LogId]
+END
+GO--
+-----------------------------------------------------------------------------------
+--Do not modify this file, instead use an alter proc to over-write the procedure.--
+--Make sure you follow the same expected interface of parameters, and resultsets.--
+-----------------------------------------------------------------------------------
+
+IF EXISTS(SELECT * FROM [dbo].[sysobjects] WHERE ID=object_id(N'[Data].[Log_Search]') AND OBJECTPROPERTY(id, N'IsProcedure')=1) DROP PROC [Data].[Log_Search]
+
+GO--
+
+CREATE PROCEDURE [Data].[Log_Search] 
+			@RunOnMachineName varchar(50) = NULL,
+			@LogContents varchar(max) = NULL
+AS --Generated--
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT	
+			[LogId],
+			[RunOnMachineName],
+			[LogContents],
+			[RunTime]
+	FROM	[Data].[Log]
+	WHERE	(@RunOnMachineName IS NULL OR [RunOnMachineName] LIKE '%' + @RunOnMachineName + '%')
+			AND (@LogContents IS NULL OR [LogContents] LIKE '%' + @LogContents + '%')
+
+END
+GO--
+-----------------------------------------------------------------------------------
+--Do not modify this file, instead use an alter proc to over-write the procedure.--
+--Make sure you follow the same expected interface of parameters, and resultsets.--
+-----------------------------------------------------------------------------------
+
+IF EXISTS(SELECT * FROM [dbo].[sysobjects] WHERE ID=object_id(N'[Data].[Log_SelectAll]') AND OBJECTPROPERTY(id, N'IsProcedure')=1) DROP PROC [Data].[Log_SelectAll]
+
+GO--
+
+CREATE PROCEDURE [Data].[Log_SelectAll]
+AS --Generated--
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT	
+			[LogId],
+			[RunOnMachineName],
+			[LogContents],
+			[RunTime]
+	FROM	[Data].[Log]
+
+END
+GO--
+-----------------------------------------------------------------------------------
+--Do not modify this file, instead use an alter proc to over-write the procedure.--
+--Make sure you follow the same expected interface of parameters, and resultsets.--
+-----------------------------------------------------------------------------------
+
+IF EXISTS(SELECT * FROM [dbo].[sysobjects] WHERE ID=object_id(N'[Data].[Log_SelectBy_LogId]') AND OBJECTPROPERTY(id, N'IsProcedure')=1) DROP PROC [Data].[Log_SelectBy_LogId]
+
+GO--
+
+CREATE PROCEDURE [Data].[Log_SelectBy_LogId] 
+			@LogId int
+AS --Generated--
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT	
+			[LogId],
+			[RunOnMachineName],
+			[LogContents],
+			[RunTime]
+	FROM	[Data].[Log]
+	WHERE	[LogId] = @LogId
+
+END
+GO--
+-----------------------------------------------------------------------------------
+--Do not modify this file, instead use an alter proc to over-write the procedure.--
+--Make sure you follow the same expected interface of parameters, and resultsets.--
+-----------------------------------------------------------------------------------
+
+IF EXISTS(SELECT * FROM [dbo].[sysobjects] WHERE ID=object_id(N'[Data].[Log_Update]') AND OBJECTPROPERTY(id, N'IsProcedure')=1) DROP PROC [Data].[Log_Update]
+
+GO--
+
+CREATE PROCEDURE [Data].[Log_Update] 
+			@LogId int,
+			@RunOnMachineName varchar(50),
+			@LogContents varchar(max),
+			@RunTime datetime
+AS --Generated--
+BEGIN
+
+	UPDATE	[Data].[Log] SET 
+			[RunOnMachineName] = @RunOnMachineName,
+			[LogContents] = @LogContents,
+			[RunTime] = @RunTime
+	WHERE	[LogId] = @LogId
+
+END
+GO--
+-----------------------------------------------------------------------------------
+--Do not modify this file, instead use an alter proc to over-write the procedure.--
+--Make sure you follow the same expected interface of parameters, and resultsets.--
+-----------------------------------------------------------------------------------
+
 IF EXISTS(SELECT * FROM [dbo].[sysobjects] WHERE ID=object_id(N'[Data].[Moniker_Delete]') AND OBJECTPROPERTY(id, N'IsProcedure')=1) DROP PROC [Data].[Moniker_Delete]
 
 GO--
@@ -2828,6 +3018,7 @@ GO--
 
 CREATE PROCEDURE [Data].[Query_Insert]
 			@Text varchar(max),
+			@PoviderSource varchar(max) = NULL,
 			@ProcessorUsed varchar(max) = NULL,
 			@Exceptions varchar(max) = NULL,
 			@IsSuccess bit
@@ -2837,12 +3028,14 @@ BEGIN
 	INSERT INTO [Data].[Query] (
 
 			[Text],
+			[PoviderSource],
 			[ProcessorUsed],
 			[Exceptions],
 			[IsSuccess]
 	) VALUES (
 
 			@Text,
+			@PoviderSource,
 			@ProcessorUsed,
 			@Exceptions,
 			@IsSuccess
@@ -2862,6 +3055,7 @@ GO--
 
 CREATE PROCEDURE [Data].[Query_Search] 
 			@Text varchar(max) = NULL,
+			@PoviderSource varchar(max) = NULL,
 			@ProcessorUsed varchar(max) = NULL,
 			@Exceptions varchar(max) = NULL
 AS --Generated--
@@ -2871,11 +3065,13 @@ BEGIN
 	SELECT	
 			[QueryId],
 			[Text],
+			[PoviderSource],
 			[ProcessorUsed],
 			[Exceptions],
 			[IsSuccess]
 	FROM	[Data].[Query]
 	WHERE	(@Text IS NULL OR [Text] LIKE '%' + @Text + '%')
+			AND (@PoviderSource IS NULL OR [PoviderSource] LIKE '%' + @PoviderSource + '%')
 			AND (@ProcessorUsed IS NULL OR [ProcessorUsed] LIKE '%' + @ProcessorUsed + '%')
 			AND (@Exceptions IS NULL OR [Exceptions] LIKE '%' + @Exceptions + '%')
 
@@ -2898,6 +3094,7 @@ BEGIN
 	SELECT	
 			[QueryId],
 			[Text],
+			[PoviderSource],
 			[ProcessorUsed],
 			[Exceptions],
 			[IsSuccess]
@@ -2923,6 +3120,7 @@ BEGIN
 	SELECT	
 			[QueryId],
 			[Text],
+			[PoviderSource],
 			[ProcessorUsed],
 			[Exceptions],
 			[IsSuccess]
@@ -2943,6 +3141,7 @@ GO--
 CREATE PROCEDURE [Data].[Query_Update] 
 			@QueryId int,
 			@Text varchar(max),
+			@PoviderSource varchar(max) = NULL,
 			@ProcessorUsed varchar(max) = NULL,
 			@Exceptions varchar(max) = NULL,
 			@IsSuccess bit
@@ -2951,6 +3150,7 @@ BEGIN
 
 	UPDATE	[Data].[Query] SET 
 			[Text] = @Text,
+			[PoviderSource] = @PoviderSource,
 			[ProcessorUsed] = @ProcessorUsed,
 			[Exceptions] = @Exceptions,
 			[IsSuccess] = @IsSuccess

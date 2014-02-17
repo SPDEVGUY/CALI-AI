@@ -8,6 +8,7 @@ GO--
 CREATE PROCEDURE [Data].[Query_Update] 
 			@QueryId int,
 			@Text varchar(max),
+			@PoviderSource varchar(max) = NULL,
 			@ProcessorUsed varchar(max) = NULL,
 			@Exceptions varchar(max) = NULL,
 			@IsSuccess bit
@@ -16,6 +17,7 @@ BEGIN
 
 	UPDATE	[Data].[Query] SET 
 			[Text] = @Text,
+			[PoviderSource] = @PoviderSource,
 			[ProcessorUsed] = @ProcessorUsed,
 			[Exceptions] = @Exceptions,
 			[IsSuccess] = @IsSuccess

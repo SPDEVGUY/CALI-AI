@@ -356,6 +356,43 @@ END</CustomProcSql>
               </KeyFields>
             </Value>
           </KeyCollectionItemOfTableDefinition>
+          <KeyCollectionItemOfTableDefinition Key="Log">
+            <Value Name="Log" IsView="false" IsSearchable="true" IsListable="false" VerifyConcurrency="false" IdentityField="LogId">
+              <Fields>
+                <Items>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="LogId">
+                    <Value Name="LogId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="RunOnMachineName">
+                    <Value Name="RunOnMachineName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="LogContents">
+                    <Value Name="LogContents" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="RunTime">
+                    <Value Name="RunTime" SqlType="datetime" DotNetType="DateTime" JavaType="String" SqlTypeWithDimension="datetime" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                </Items>
+              </Fields>
+              <Indexes>
+                <Items>
+                  <KeyCollectionItemOfIndexDefinition Key="PK_Log">
+                    <Value Name="PK_Log" IsPrimaryKey="true" IsForeignKey="false" IsUniqueKey="true" IsClustered="true">
+                      <FieldNames>
+                        <string>LogId</string>
+                      </FieldNames>
+                    </Value>
+                  </KeyCollectionItemOfIndexDefinition>
+                </Items>
+              </Indexes>
+              <FKeys>
+                <Items />
+              </FKeys>
+              <KeyFields>
+                <string>LogId</string>
+              </KeyFields>
+            </Value>
+          </KeyCollectionItemOfTableDefinition>
           <KeyCollectionItemOfTableDefinition Key="Moniker">
             <Value Name="Moniker" IsView="false" IsSearchable="true" IsListable="false" VerifyConcurrency="false" IdentityField="MonikerId">
               <Fields>
@@ -409,6 +446,9 @@ END</CustomProcSql>
                   </KeyCollectionItemOfAdvancedFieldDefinition>
                   <KeyCollectionItemOfAdvancedFieldDefinition Key="Text">
                     <Value Name="Text" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                  </KeyCollectionItemOfAdvancedFieldDefinition>
+                  <KeyCollectionItemOfAdvancedFieldDefinition Key="PoviderSource">
+                    <Value Name="PoviderSource" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
                   </KeyCollectionItemOfAdvancedFieldDefinition>
                   <KeyCollectionItemOfAdvancedFieldDefinition Key="ProcessorUsed">
                     <Value Name="ProcessorUsed" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
@@ -613,6 +653,59 @@ END</CustomProcSql>
               </Parameters>
             </Value>
           </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Log_Insert">
+            <Value Name="Log_Insert" MethodName="Insert" ProcedureType="IdentityInsert" TableName="Log" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="RunOnMachineName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="LogContents" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="RunTime" SqlType="datetime" DotNetType="DateTime" JavaType="String" SqlTypeWithDimension="datetime" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Log_Update">
+            <Value Name="Log_Update" MethodName="Update" ProcedureType="NonQuery" TableName="Log" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="LogId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="RunOnMachineName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="LogContents" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="RunTime" SqlType="datetime" DotNetType="DateTime" JavaType="String" SqlTypeWithDimension="datetime" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Log_Delete">
+            <Value Name="Log_Delete" MethodName="Delete" ProcedureType="NonQuery" TableName="Log" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="LogId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Log_Exists">
+            <Value Name="Log_Exists" MethodName="Exists" ProcedureType="ExistsQuery" TableName="Log" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="LogId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Log_Search">
+            <Value Name="Log_Search" MethodName="Search" ProcedureType="Lookup" TableName="Log" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="RunOnMachineName" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(50)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="LogContents" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Log_SelectAll">
+            <Value Name="Log_SelectAll" MethodName="SelectAll" ProcedureType="Lookup" TableName="Log" IsStatic="false">
+              <Parameters />
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
+          <KeyCollectionItemOfProcedureDefinition Key="Log_SelectBy_LogId">
+            <Value Name="Log_SelectBy_LogId" MethodName="SelectBy_LogId" ProcedureType="Lookup" TableName="Log" IsStatic="false">
+              <Parameters>
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="LogId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
+              </Parameters>
+            </Value>
+          </KeyCollectionItemOfProcedureDefinition>
           <KeyCollectionItemOfProcedureDefinition Key="Moniker_Insert">
             <Value Name="Moniker_Insert" MethodName="Insert" ProcedureType="IdentityInsert" TableName="Moniker" IsStatic="false">
               <Parameters>
@@ -676,6 +769,7 @@ END</CustomProcSql>
             <Value Name="Query_Insert" MethodName="Insert" ProcedureType="IdentityInsert" TableName="Query" IsStatic="false">
               <Parameters>
                 <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Text" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="PoviderSource" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
                 <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="ProcessorUsed" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
                 <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Exceptions" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
                 <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="IsSuccess" SqlType="bit" DotNetType="bool" JavaType="boolean" SqlTypeWithDimension="bit" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
@@ -687,6 +781,7 @@ END</CustomProcSql>
               <Parameters>
                 <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="QueryId" SqlType="int" DotNetType="int" JavaType="int" SqlTypeWithDimension="int" IsNullable="false" IsPrimaryKey="true" IsIdentity="true" IsSearchable="false" IsTimestamp="false" />
                 <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Text" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="PoviderSource" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
                 <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="ProcessorUsed" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
                 <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Exceptions" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
                 <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="IsSuccess" SqlType="bit" DotNetType="bool" JavaType="boolean" SqlTypeWithDimension="bit" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="false" IsTimestamp="false" />
@@ -711,6 +806,7 @@ END</CustomProcSql>
             <Value Name="Query_Search" MethodName="Search" ProcedureType="Lookup" TableName="Query" IsStatic="false">
               <Parameters>
                 <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Text" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="false" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
+                <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="PoviderSource" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
                 <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="ProcessorUsed" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
                 <FieldDefinition xsi:type="AdvancedFieldDefinition" Name="Exceptions" SqlType="varchar" DotNetType="string" JavaType="String" SqlTypeWithDimension="varchar(max)" IsNullable="true" IsPrimaryKey="false" IsIdentity="false" IsSearchable="true" IsTimestamp="false" />
               </Parameters>

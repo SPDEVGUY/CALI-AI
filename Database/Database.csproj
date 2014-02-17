@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CALI.Database</RootNamespace>
     <AssemblyName>CALI.Database</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.SqlServer.Types, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
@@ -62,6 +65,8 @@
     <Compile Include="Contracts\Data\BinaryDataMoniker\BinaryDataMonikerContractBase.cs" />
     <Compile Include="Contracts\Data\BinaryData\BinaryDataContract.cs" />
     <Compile Include="Contracts\Data\BinaryData\BinaryDataContractBase.cs" />
+    <Compile Include="Contracts\Data\Log\LogContract.cs" />
+    <Compile Include="Contracts\Data\Log\LogContractBase.cs" />
     <Compile Include="Contracts\Data\Moniker\MonikerContract.cs" />
     <Compile Include="Contracts\Data\Moniker\MonikerContractBase.cs" />
     <Compile Include="Contracts\Data\Query\QueryContract.cs" />
@@ -102,6 +107,9 @@
     <Compile Include="Logic\Data\BinaryData\BinaryDataLogic.cs" />
     <Compile Include="Logic\Data\BinaryData\BinaryDataLogic.Static.cs" />
     <Compile Include="Logic\Data\BinaryData\BinaryDataLogicBase.cs" />
+    <Compile Include="Logic\Data\Log\LogLogic.cs" />
+    <Compile Include="Logic\Data\Log\LogLogic.Static.cs" />
+    <Compile Include="Logic\Data\Log\LogLogicBase.cs" />
     <Compile Include="Logic\Data\Moniker\MonikerContractBase.Logic.cs" />
     <Compile Include="Logic\Data\Moniker\MonikerLogic.cs" />
     <Compile Include="Logic\Data\Moniker\MonikerLogic.Static.cs" />
@@ -136,6 +144,7 @@
     <Content Include="SQL\Alter\02-EnsureTables\Data\00-TableVersion.sql" />
     <Content Include="SQL\Alter\02-EnsureTables\Data\BinaryData.sql" />
     <Content Include="SQL\Alter\02-EnsureTables\Data\BinaryDataMoniker.sql" />
+    <Content Include="SQL\Alter\02-EnsureTables\Data\Log.sql" />
     <Content Include="SQL\Alter\02-EnsureTables\Data\Moniker.sql" />
     <Content Include="SQL\Alter\02-EnsureTables\Data\Query.sql" />
     <Content Include="SQL\Alter\03-Updates\Auth\TableName_V1.txt" />

@@ -13,6 +13,7 @@ BEGIN
 	SELECT	
 			[QueryId],
 			[Text],
+			[PoviderSource],
 			[ProcessorUsed],
 			[Exceptions],
 			[IsSuccess]

@@ -7,6 +7,7 @@ IF EXISTS(SELECT * FROM [dbo].[sysobjects] WHERE ID=object_id(N'[Data].[Query_In
 GO--
 CREATE PROCEDURE [Data].[Query_Insert]
 			@Text varchar(max),
+			@PoviderSource varchar(max) = NULL,
 			@ProcessorUsed varchar(max) = NULL,
 			@Exceptions varchar(max) = NULL,
 			@IsSuccess bit
@@ -16,12 +17,14 @@ BEGIN
 	INSERT INTO [Data].[Query] (
 
 			[Text],
+			[PoviderSource],
 			[ProcessorUsed],
 			[Exceptions],
 			[IsSuccess]
 	) VALUES (
 
 			@Text,
+			@PoviderSource,
 			@ProcessorUsed,
 			@Exceptions,
 			@IsSuccess

@@ -13,10 +13,16 @@ namespace CALI.Logic.Common.Util
 {
     public class BinaryDataRetriever
     {
-        public static BinaryDataContract StoreData(string dataType, byte[] data)
+        public static BinaryDataContract StoreData(string dataType, string data)
         {
-            //TODO: Add lookup for hash on binary data to prevent duplication?
-            var hash = ComputeHash(data);
+            var dataBytes = Encoding.ASCII.GetBytes(data);
+            var hashBytes = Encoding.ASCII.GetBytes(data.ToLower());
+            return StoreData(dataType, dataBytes,ComputeHash(hashBytes));
+        }
+
+        public static BinaryDataContract StoreData(string dataType, byte[] data, string hash = null)
+        {
+            hash = hash ?? ComputeHash(data);
 
             var binaryData = BinaryDataLogic.SelectBy_HashNow(hash).FirstOrDefault()
                 ?? new BinaryDataContract
@@ -29,6 +35,7 @@ namespace CALI.Logic.Common.Util
 
             if(binaryData.BinaryDataId == null) BinaryDataLogic.SaveNow(binaryData);
 
+            Logger.Log.Info("Stored data '{0}:{1}'", binaryData.BinaryDataId, binaryData.Hash);
             return binaryData;
         }
 

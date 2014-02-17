@@ -7,6 +7,7 @@ IF EXISTS(SELECT * FROM [dbo].[sysobjects] WHERE ID=object_id(N'[Data].[Query_Se
 GO--
 CREATE PROCEDURE [Data].[Query_Search] 
 			@Text varchar(max) = NULL,
+			@PoviderSource varchar(max) = NULL,
 			@ProcessorUsed varchar(max) = NULL,
 			@Exceptions varchar(max) = NULL
 AS --Generated--
@@ -16,11 +17,13 @@ BEGIN
 	SELECT	
 			[QueryId],
 			[Text],
+			[PoviderSource],
 			[ProcessorUsed],
 			[Exceptions],
 			[IsSuccess]
 	FROM	[Data].[Query]
 	WHERE	(@Text IS NULL OR [Text] LIKE '%' + @Text + '%')
+			AND (@PoviderSource IS NULL OR [PoviderSource] LIKE '%' + @PoviderSource + '%')
 			AND (@ProcessorUsed IS NULL OR [ProcessorUsed] LIKE '%' + @ProcessorUsed + '%')
 			AND (@Exceptions IS NULL OR [Exceptions] LIKE '%' + @Exceptions + '%')
 

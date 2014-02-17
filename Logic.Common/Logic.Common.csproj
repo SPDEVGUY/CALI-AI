@@ -41,13 +41,20 @@
   <ItemGroup>
     <Compile Include="Interfaces\ICaliQueryProcessor.cs" />
     <Compile Include="Interfaces\ICaliQueryProvider.cs" />
-    <Compile Include="Processors\IsTheFor.cs" />
-    <Compile Include="Processors\WhoWhatAreIsTheFor.cs" />
+    <Compile Include="Interfaces\SortOrderEnum.cs" />
+    <Compile Include="Processors\ThisIsMonikers.cs" />
+    <Compile Include="Processors\WhatIsMonikers.cs" />
+    <Compile Include="Processors\MonikerMeansMonikers.cs" />
+    <Compile Include="Processors\MonikersIsTheMonikerForMoniker.cs" />
+    <Compile Include="Processors\ProcessorBase.cs" />
+    <Compile Include="Processors\WhoAreTheMonikersForMonikers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryRouter.cs" />
     <Compile Include="Util\BinaryDataRetriever.cs" />
+    <Compile Include="Util\Logger.cs" />
     <Compile Include="Util\QueryRetriever.cs" />
     <Compile Include="Util\MonikerRetriever.cs" />
+    <Compile Include="Util\ReflectoMatic.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Database\Database.csproj">

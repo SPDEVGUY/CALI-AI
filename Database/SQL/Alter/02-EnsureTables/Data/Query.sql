@@ -3,6 +3,7 @@ BEGIN
 	CREATE TABLE [Data].[Query](
 		[QueryId] int IDENTITY(1,1) NOT NULL,
 		[Text] varchar(max)  NOT NULL,
+		[PoviderSource] varchar(max)  NULL,
 		[ProcessorUsed] varchar(max)  NULL,
 		[Exceptions] varchar(max)  NULL,
 		[IsSuccess] bit  NOT NULL,

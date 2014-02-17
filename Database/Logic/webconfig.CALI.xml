@@ -11,10 +11,10 @@
   
   -->
 <actions>
-  <add path="configuration" id="8e93e983-db0b-417f-b807-a4c0c2b18adc">
+  <add path="configuration" id="88ac6941-05dc-479c-9030-63e943304815">
     <connectionStrings></connectionStrings>
   </add>
-  <add path="configuration/connectionStrings" id="56be9dbc-d823-4cbb-8175-9c38c1531a64">
+  <add path="configuration/connectionStrings" id="04a0e97e-6bcf-4e8d-a764-0bc9358df9fe">
     <add name="CALIConnectionString" connectionString="Data Source=.;Initial Catalog=CALI;User Id=CALIUser;Password=ThisIsASecurePassw0rd!;" providerName="System.Data.SqlClient" />
   </add>
 </actions>

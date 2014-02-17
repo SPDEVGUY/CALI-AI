@@ -29,11 +29,13 @@ namespace CALI.Database.Logic.Data
 		/// Run Query_Insert.
 		/// </summary>
 		/// <param name="fldText">Value for Text</param>
+		/// <param name="fldPoviderSource">Value for PoviderSource</param>
 		/// <param name="fldProcessorUsed">Value for ProcessorUsed</param>
 		/// <param name="fldExceptions">Value for Exceptions</param>
 		/// <param name="fldIsSuccess">Value for IsSuccess</param>
 		/// <returns>The new ID</returns>
 		public virtual int? Insert(string fldText
+, string fldPoviderSource
 , string fldProcessorUsed
 , string fldExceptions
 , bool fldIsSuccess
@@ -51,6 +53,8 @@ namespace CALI.Database.Logic.Data
 				{
 					cmd.Parameters.AddRange(new[] {
 						new SqlParameter("@Text", fldText)
+,
+						new SqlParameter("@PoviderSource", fldPoviderSource)
 ,
 						new SqlParameter("@ProcessorUsed", fldProcessorUsed)
 ,
@@ -70,6 +74,7 @@ namespace CALI.Database.Logic.Data
 		/// Run Query_Insert.
 		/// </summary>
 		/// <param name="fldText">Value for Text</param>
+		/// <param name="fldPoviderSource">Value for PoviderSource</param>
 		/// <param name="fldProcessorUsed">Value for ProcessorUsed</param>
 		/// <param name="fldExceptions">Value for Exceptions</param>
 		/// <param name="fldIsSuccess">Value for IsSuccess</param>
@@ -77,6 +82,7 @@ namespace CALI.Database.Logic.Data
 		/// <param name="transaction">The SqlTransaction to use</param>
 		/// <returns>The new ID</returns>
 		public virtual int? Insert(string fldText
+, string fldPoviderSource
 , string fldProcessorUsed
 , string fldExceptions
 , bool fldIsSuccess
@@ -88,6 +94,8 @@ namespace CALI.Database.Logic.Data
 			{
 					cmd.Parameters.AddRange(new[] {
 						new SqlParameter("@Text", fldText)
+,
+						new SqlParameter("@PoviderSource", fldPoviderSource)
 ,
 						new SqlParameter("@ProcessorUsed", fldProcessorUsed)
 ,
@@ -121,6 +129,8 @@ namespace CALI.Database.Logic.Data
 					cmd.Parameters.AddRange(new[] {
 						new SqlParameter("@Text", row.Text)
 ,
+						new SqlParameter("@PoviderSource", row.PoviderSource)
+,
 						new SqlParameter("@ProcessorUsed", row.ProcessorUsed)
 ,
 						new SqlParameter("@Exceptions", row.Exceptions)
@@ -152,6 +162,8 @@ namespace CALI.Database.Logic.Data
 			{
 					cmd.Parameters.AddRange(new[] {
 						new SqlParameter("@Text", row.Text)
+,
+						new SqlParameter("@PoviderSource", row.PoviderSource)
 ,
 						new SqlParameter("@ProcessorUsed", row.ProcessorUsed)
 ,
@@ -201,11 +213,13 @@ namespace CALI.Database.Logic.Data
 		/// <returns>The number of rows affected.</returns>
 		/// <param name="fldQueryId">Value for QueryId</param>
 		/// <param name="fldText">Value for Text</param>
+		/// <param name="fldPoviderSource">Value for PoviderSource</param>
 		/// <param name="fldProcessorUsed">Value for ProcessorUsed</param>
 		/// <param name="fldExceptions">Value for Exceptions</param>
 		/// <param name="fldIsSuccess">Value for IsSuccess</param>
 		public virtual int Update(int fldQueryId
 , string fldText
+, string fldPoviderSource
 , string fldProcessorUsed
 , string fldExceptions
 , bool fldIsSuccess
@@ -225,6 +239,8 @@ namespace CALI.Database.Logic.Data
 						new SqlParameter("@QueryId", fldQueryId)
 ,
 						new SqlParameter("@Text", fldText)
+,
+						new SqlParameter("@PoviderSource", fldPoviderSource)
 ,
 						new SqlParameter("@ProcessorUsed", fldProcessorUsed)
 ,
@@ -247,6 +263,7 @@ namespace CALI.Database.Logic.Data
 		/// </summary>
 		/// <param name="fldQueryId">Value for QueryId</param>
 		/// <param name="fldText">Value for Text</param>
+		/// <param name="fldPoviderSource">Value for PoviderSource</param>
 		/// <param name="fldProcessorUsed">Value for ProcessorUsed</param>
 		/// <param name="fldExceptions">Value for Exceptions</param>
 		/// <param name="fldIsSuccess">Value for IsSuccess</param>
@@ -255,6 +272,7 @@ namespace CALI.Database.Logic.Data
 		/// <returns>The number of rows affected.</returns>
 		public virtual int Update(int fldQueryId
 , string fldText
+, string fldPoviderSource
 , string fldProcessorUsed
 , string fldExceptions
 , bool fldIsSuccess
@@ -269,6 +287,8 @@ namespace CALI.Database.Logic.Data
 						new SqlParameter("@QueryId", fldQueryId)
 ,
 						new SqlParameter("@Text", fldText)
+,
+						new SqlParameter("@PoviderSource", fldPoviderSource)
 ,
 						new SqlParameter("@ProcessorUsed", fldProcessorUsed)
 ,
@@ -307,6 +327,8 @@ namespace CALI.Database.Logic.Data
 ,
 						new SqlParameter("@Text", row.Text)
 ,
+						new SqlParameter("@PoviderSource", row.PoviderSource)
+,
 						new SqlParameter("@ProcessorUsed", row.ProcessorUsed)
 ,
 						new SqlParameter("@Exceptions", row.Exceptions)
@@ -341,6 +363,8 @@ namespace CALI.Database.Logic.Data
 						new SqlParameter("@QueryId", row.QueryId)
 ,
 						new SqlParameter("@Text", row.Text)
+,
+						new SqlParameter("@PoviderSource", row.PoviderSource)
 ,
 						new SqlParameter("@ProcessorUsed", row.ProcessorUsed)
 ,
@@ -587,10 +611,12 @@ namespace CALI.Database.Logic.Data
 		/// Run Query_Search, and return results as a list of QueryRow.
 		/// </summary>
 		/// <param name="fldText">Value for Text</param>
+		/// <param name="fldPoviderSource">Value for PoviderSource</param>
 		/// <param name="fldProcessorUsed">Value for ProcessorUsed</param>
 		/// <param name="fldExceptions">Value for Exceptions</param>
 		/// <returns>A collection of QueryRow.</returns>
 		public virtual bool Search(string fldText
+, string fldPoviderSource
 , string fldProcessorUsed
 , string fldExceptions
 )
@@ -609,6 +635,8 @@ namespace CALI.Database.Logic.Data
 					cmd.Parameters.AddRange(new[] {
 						new SqlParameter("@Text", fldText)
 ,
+						new SqlParameter("@PoviderSource", fldPoviderSource)
+,
 						new SqlParameter("@ProcessorUsed", fldProcessorUsed)
 ,
 						new SqlParameter("@Exceptions", fldExceptions)
@@ -626,12 +654,14 @@ namespace CALI.Database.Logic.Data
 		/// Run Query_Search, and return results as a list of QueryRow.
 		/// </summary>
 		/// <param name="fldText">Value for Text</param>
+		/// <param name="fldPoviderSource">Value for PoviderSource</param>
 		/// <param name="fldProcessorUsed">Value for ProcessorUsed</param>
 		/// <param name="fldExceptions">Value for Exceptions</param>
 		/// <param name="connection">The SqlConnection to use</param>
 		/// <param name="transaction">The SqlTransaction to use</param>
 		/// <returns>A collection of QueryRow.</returns>
 		public virtual bool Search(string fldText
+, string fldPoviderSource
 , string fldProcessorUsed
 , string fldExceptions
 , SqlConnection connection, SqlTransaction transaction)
@@ -642,6 +672,8 @@ namespace CALI.Database.Logic.Data
 			{
 					cmd.Parameters.AddRange(new[] {
 						new SqlParameter("@Text", fldText)
+,
+						new SqlParameter("@PoviderSource", fldPoviderSource)
 ,
 						new SqlParameter("@ProcessorUsed", fldProcessorUsed)
 ,
@@ -775,9 +807,10 @@ namespace CALI.Database.Logic.Data
 					{
 					QueryId = reader.GetInt32(0),
 					Text = reader.GetString(1),
-					ProcessorUsed = reader.IsDBNull(2) ? null : reader.GetString(2),
-					Exceptions = reader.IsDBNull(3) ? null : reader.GetString(3),
-					IsSuccess = reader.GetBoolean(4),
+					PoviderSource = reader.IsDBNull(2) ? null : reader.GetString(2),
+					ProcessorUsed = reader.IsDBNull(3) ? null : reader.GetString(3),
+					Exceptions = reader.IsDBNull(4) ? null : reader.GetString(4),
+					IsSuccess = reader.GetBoolean(5),
 
 					});
 				return true;

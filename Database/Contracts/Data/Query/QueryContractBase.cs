@@ -24,6 +24,10 @@ namespace CALI.Database.Contracts.Data
 
 		//(Nullable) varchar(max)
 		[DataMember]
+		public virtual string PoviderSource { get; set; }
+
+		//(Nullable) varchar(max)
+		[DataMember]
 		public virtual string ProcessorUsed { get; set; }
 
 		//(Nullable) varchar(max)

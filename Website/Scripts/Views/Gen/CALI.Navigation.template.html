@@ -11,7 +11,7 @@
                 </button>
                 <a class="navbar-brand" href="#"><img src="/Content/images/favicon.png"/> {{Title}}</a>
             </div>
-            <div class="collapse navbar-collapse">
+            <div class="navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li data-ng-repeat="Item in Items" class="{{Item.Css}} hide-{{Item.AuthOnly && !IsAuthenticated()}}"><a href="{{Item.Url}}"><i class="glyphicon glyphicon-{{Item.Icon}}"></i> {{Item.Text}}</a></li>
                 </ul>
