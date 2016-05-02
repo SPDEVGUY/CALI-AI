@@ -42,6 +42,7 @@
     <Compile Include="Interfaces\ICaliQueryProcessor.cs" />
     <Compile Include="Interfaces\ICaliQueryProvider.cs" />
     <Compile Include="Interfaces\SortOrderEnum.cs" />
+    <Compile Include="Processors\WhereIsMonikers.cs" />
     <Compile Include="Processors\ThisIsMonikers.cs" />
     <Compile Include="Processors\WhatIsMonikers.cs" />
     <Compile Include="Processors\MonikerMeansMonikers.cs" />
